@@ -1,0 +1,28 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="content-section">
+	<div class="media">
+	    <img class="rounded-circle account-img" src="{{ object.associate.profileassociate.image.url }}">
+	    <div class="media-body">
+	      	<h2 class="account-helang">{{ object.associate.profileassociate.first_name }} {{ object.associate.profileassociate.last_name }}</h2>
+	      	<p class="text-secondary">Gender: {{ application.associate.profileassociate.gender }}</p>
+	      	<p class="text-secondary">Date of Birth: {{ application.associate.profileassociate.date_of_birth }}</p>
+	      	<p class="text-secondary">Work Experience: {{ application.associate.profileassociate.work_ex }}</p>
+	      	<p class="text-secondary">Highest Qualification: {{ application.associate.profileassociate.max_qualification }}</p>
+	      	<p class="text-secondary">10th percentage: {{ application.associate.profileassociate.ssc_score }}</p>
+	      	<p class="text-secondary">10th result: {{ application.associate.profileassociate.ssc_result }}</p>
+	      	<p class="text-secondary">About/ Skill: {{ application.associate.profileassociate.associate_bio }}</p>
+	    </div>
+  	</div>
+</div>
+
+<div class="navbar-nav">
+	{% if user.is_authenticated and user.is_fellow %}
+		{% if object.is_hired %}
+			<a class= "btn btn-success btn-sm mt-1 mb-1" href="#">Hired. Associate would join you soon. Thank You!</a>
+		{% else %}
+			<a class= "btn btn-success btn-sm mt-1 mb-1" href="{% url 'hire_associate' object.id %}">Hire</a>
+		{% endif %}
+	{% endif %}
+</div>
+{% endblock content %}

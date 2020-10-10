@@ -1,0 +1,64 @@
+{% extends "blog/base.html" %}
+{% load mathfilters %}
+{% block content %}
+	<div class="content-section">
+		<div class="media">
+		    <h1 class="mb-3" >{{ view.kwargs.username }}</h1>
+		</div>
+		
+		<div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-client-dashboard">
+                    <thead>
+                    <tr>
+                        <th>Job title</th>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for application in applications %}
+                        <tr>
+                            <th><a href="{% url 'post-detail' application.post.id %}">{{ application.post.job_title }}</a></th>
+                            <td>
+                                {% if application.is_hired %}
+                                    <span class="badge badge-success"> Accepted</span>
+                                {% else %}
+                                    <span class="badge badge-secondary"> Under review</span>
+                                {% endif %}
+                            </td>
+
+                            <td> {{ application.post.start_date|date:"F d, Y" }} </td>
+                            
+                            <td>
+                                <br>
+                                {% if application.is_hired == False %}
+                                    <span class="badge badge-success">Under review</span>
+                                {% else %}
+                                    <span class="badge badge-success">Congratulations!!!</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+            
+
+		<!-- {% for post in logged_in_fellow_posts %}
+			<article class="media content-section">
+			  	<div class="media-body">
+				    <div class="article-metadata">
+				      <a class="mr-2" href="{% url 'fellow-posts' post.fellow.username %}">{{ post.fellow }}</a>
+				      <small class="text-muted">{{ post.from_date|date:"F d, Y" }}</small>
+				    </div>
+			    	<h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.job_title }}</a></h2>
+				    <p class="article-content">Job description: {{ post.job_description }}</p>
+				    <p class="article-content">Vacancy: {{ post.vacancy }}</p>
+			  	</div>
+			</article>
+		{% endfor %} -->
+	</div>
+{% endblock content %}

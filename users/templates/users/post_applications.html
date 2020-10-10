@@ -1,0 +1,38 @@
+{% extends "blog/base.html" %}
+{% block title %}
+    Applicants
+{% endblock %}
+{% load static %}
+
+{% block content %}
+
+	<section class="bg-light-gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">Applicants for the {{ post.job_title }} position</a></h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="row">
+                {% for application in applications %}
+                    <div class="col-lg-6">
+                        <div class="box applicant">
+                            <h3><a class="article-title" href="{% url 'hire_associate_detail' application.id %}">{{ application.associate }}</a></h3>
+                            <p>
+                                <span class="badge badge-info">Applied {{ application.created_at.astimezone }}</span>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if post.applicants.count == 0 %}
+                    <h3>No Applicants Applied For This Job</h3>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

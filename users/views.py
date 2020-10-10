@@ -1,0 +1,237 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.db import IntegrityError
+from django.http import Http404, HttpResponseRedirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView, ListView, DetailView
+from django.conf import settings
+from django.urls import reverse_lazy
+
+from .forms import *
+from blog.models import *
+from .models import *
+from partshala.urls import *
+from blog.urls import *
+
+# User = settings.AUTH_USER_MODEL
+
+
+def register_fellow(request):
+    if request.method == 'POST':
+        form = FellowRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_fellow = True
+            user.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Your account has been created! You can Log in')
+            return redirect('login')
+    else:
+        form = FellowRegisterForm()
+    return render(request, 'users/register-fellow.html', {'form': form})
+
+
+def register_associate(request):
+    if request.method == 'POST':
+        form = AssociateRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_associate = True
+            user.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Your account has been created! You can Log in')
+            return redirect('login')
+    else:
+        form = AssociateRegisterForm()
+    return render(request, 'users/register-associate.html', {'form': form})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user.is_fellow:
+                login(request, user)
+                return redirect('profile_fellow')
+            if user.is_associate:
+                login(request, user)
+                return redirect('profile_associate')
+    else:
+        form = UserLoginForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'users/login.html', context)
+
+
+@login_required
+def profile_fellow(request):
+    if request.method == 'POST':
+        u_form = FellowUpdateForm(request.POST, instance=request.user.profilefellow)
+        p_form = FellowPicUpdateForm(request.POST, request.FILES, instance=request.user.profilefellow)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile_fellow')
+    else:
+        u_form = FellowUpdateForm(instance=request.user.profilefellow)
+        p_form = FellowPicUpdateForm(instance=request.user.profilefellow)
+
+    logged_in_fellow_posts = Post.objects.filter(fellow=request.user).order_by('-post_date')
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'logged_in_fellow_posts': logged_in_fellow_posts
+    }
+    return render(request, 'users/profile_fellow.html', context)
+
+
+@login_required
+def profile_associate(request):
+    if request.method == 'POST':
+        u_form = AssociateUpdateForm(request.POST, instance=request.user.profileassociate)
+        p_form = AssociatePicUpdateForm(request.POST, request.FILES, instance=request.user.profileassociate)
+        d_form = SSCResultForm(request.POST, request.FILES, instance=request.user.profileassociate)
+        if u_form.is_valid() and p_form.is_valid() and d_form.is_valid():
+            u_form.save()
+            p_form.save()
+            d_form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile_associate')
+    else:
+        u_form = AssociateUpdateForm(instance=request.user.profileassociate)
+        p_form = AssociatePicUpdateForm(instance=request.user.profileassociate)
+        d_form = SSCResultForm(instance=request.user.profileassociate)
+
+    # logged_in_associate_applications = Post.objects.filter(associate=request.user).order_by('-date')
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'd_form': d_form,
+        # 'logged_in_associate_applications': logged_in_associate_applications
+    }
+    return render(request, 'users/profile_associate.html', context)
+
+
+class ApplyJobView(CreateView):
+    model = Application
+    form_class = ApplyJobForm
+    slug_field = 'post_id'
+    slug_url_kwarg = 'post_id'
+
+    @method_decorator(login_required(login_url=reverse_lazy('login')))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            messages.info(self.request, 'Successfully applied for the job!')
+            return self.form_valid(form)
+        else:
+            return HttpResponseRedirect(reverse_lazy('blog-home'))
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'id': self.kwargs['post_id']})
+
+    def form_valid(self, form):
+        # check if user already applied
+        associate = Application.objects.filter(associate_id=self.request.user.id, post_id=self.kwargs['post_id'])
+        if associate:
+            messages.info(self.request, 'You already applied for this job')
+            return HttpResponseRedirect(self.get_success_url())
+        # save applicant
+        form.instance.associate = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+@login_required(login_url=reverse_lazy('login'))
+def hire_associate(request, application_id=None):
+    # try:
+    associate = Application.objects.get(id=application_id)
+    associate.is_hired = True
+    associate.save()
+    messages.success(request, f'Hiring Successfully. Associate will be notified. Thank you!')
+    # except IntegrityError as e:
+    #     print(e.message)
+    #     return HttpResponseRedirect(reverse_lazy('profile_fellow'))
+    # return HttpResponseRedirect(reverse_lazy('profile_fellow'))
+    return redirect('hire_associate_detail', application_id=application_id)
+
+
+class ApplicantPerJobView(ListView):
+    model = Application
+    template_name = 'users/post_applications.html'
+    context_object_name = 'applications'
+    paginate_by = 3
+
+    @method_decorator(login_required(login_url=reverse_lazy('login')))
+    # @method_decorator(user_is_fellow)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Application.objects.filter(post_id=self.kwargs['post_id']).order_by('id')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = Post.objects.get(id=self.kwargs['post_id'])
+        return context
+
+
+@login_required(login_url=reverse_lazy('login'))
+def filled(request, post_id=None):
+    try:
+        post = Post.objects.get(fellow_id=request.user.id, id=post_id)
+        post.filled = True
+        post.save()
+    except IntegrityError as e:
+        print(e.message)
+        return HttpResponseRedirect(reverse_lazy('profile_fellow'))
+    return HttpResponseRedirect(reverse_lazy('profile_fellow'))
+
+
+class ApplicantDetailView(DetailView):
+    model = Application
+    template_name = 'users/hire_associate_detail.html'
+    pk_url_kwarg = 'application_id'
+
+    def get_object(self, queryset=None):
+        obj = super(ApplicantDetailView, self).get_object(queryset=queryset)
+        if obj is None:
+            raise Http404("Associate doesn't exists")
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+        except Http404:
+            # raise error
+            raise Http404("Associate doesn't exists")
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+
+class AssociateApplicationListView(ListView):
+    model = Application
+    template_name = 'users/associate_dashboard.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'applications'
+    paginate_by = 3
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get_queryset(self):
+        # return Applicants.objects.filter(user=self.request.user)
+        # associate = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Application.objects.filter(associate=self.request.user).order_by('-created_at')
