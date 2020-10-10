@@ -25,7 +25,7 @@ SECRET_KEY = '(hn+v9*p8c#mt-v^uai1!-0fo7o9156w6pubvnwbjyj_nq&h*='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.partshala.co']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.partshala.co', '15.206.82.101']
 
 
 # Application definition
