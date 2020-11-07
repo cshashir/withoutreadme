@@ -1,52 +1,67 @@
 {% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
 
 {% if user.is_authenticated and user.is_associate %}
 	{% load is_already_applied %}
 {% endif %}
 
 {% block content %}
-	<article class="media content-section">
-	  <img class="rounded-circle article-img" src="{{ post.fellow.profilefellow.image.url }}">
-	  <div class="media-body">
-	    <div class="article-metadata">
-	      <a class="mr-2" href="{% url 'fellow-posts' post.fellow.username %}">{{ object.fellow }}</a>
-	      <small class="text-muted">{{ object.post_date|date:"F d, Y" }}</small>
-	      	<div class="navbar-nav">
-        		{% if user.is_authenticated and user.is_fellow %}
-		      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
-		      		<a class= "btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
-        		{% elif user.is_authenticated and user.is_associate %}
-        			{% is_already_applied post request.user as is_applied %}
-                    {% if is_applied %}
-                        <input type="button" class="btn btn-success btn-sm mt-1 mb-1" value="Already applied"/>
-                    {% else %}
-	      				<form action="{% url 'apply_job' post.id %}" method="post">
-	                        {% csrf_token %}
-	                        <input type="hidden" name="post" value="{{ post.id }}">
-	                        <input type="submit" class="btn btn-outline-white-primary"
-	                               value="Apply"/>
-	                    </form>
-	        		{% endif %}
-	        	{% else %}
-	        		<form action="{% url 'apply_job' post.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="post" value="{{ post.id }}">
-                        <input type="submit" class="btn btn-outline-white-primary"
-                               value="Apply"/>
-                    </form>
-        		{% endif %}
-        	</div>
+<div class="row justify-content-center">
+	<div class="col-12 col-md-9">
+			<article class="media content-section">
+			  <img class="rounded-circle article-img" src="{{ post.fellow.profilefellow.image.url }}">
+			  <div class="media-body">
+			  	<div>
+				    <h2 class="article-title" style="color: #4f8edc;" >{{ object.job_title }}, {{ object.city }} </h2>
+				</div>
+			    <div class="article-metadata">
+			      <a class="mr-2"  style="color: #e28b9c;" href="{% url 'fellow-posts' post.fellow.username %}">{{ object.fellow.profilefellow.company_name }}</a>
+			      <small class="text-muted">{{ object.post_date|date:"F d, Y" }}</small>
+			    </div>
+			    <div class="navbar-nav">
+		        		{% if user.is_authenticated and user.is_fellow %}
+		        			{% if user == post.fellow %}
+					      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
+					      		<a class= "btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
+							{% endif %}
 
-	    <h2 class="article-title">{{ object.job_title }}, {{ object.city }} </h2>
-	    <p class="article-content">Description: {{ object.job_description }}</p>
-	    <p class="article-content">Stipend: {{ object.stipend}}</p>
-	    <p class="article-content">Start date: {{ object.start_date }}</p>
-	    <p class="article-content">End date: {{ object.end_date }}</p>
-	    <p class="article-content">Start time: {{ object.start_time }}</p>
-	    <p class="article-content">End time: {{ object.end_time }}</p>
-	    <p class="article-content">Skills required: {{ object.skills_reqd }}</p>
-	    <p class="article-content">Vacancy: {{ object.vacancy }}</p>
-	    <p class="article-content">Address: {{ object.address }}</p>
-	  </div>
-	</article>
+		        		{% elif user.is_authenticated and user.is_associate %}
+		        			{% is_already_applied post request.user as is_applied %}
+		                    {% if is_applied %}
+		                        <input type="button" class="btn btn-success" value="Already applied"/>
+		                    {% else %}
+			      				<form action="{% url 'apply_job' post.id %}" method="post">
+			                        {% csrf_token %}
+			                        <input type="hidden" name="post" value="{{ post.id }}">
+			                        <input type="submit" class="btn btn-primary"
+			                               value="Apply"/>
+			                    </form>
+			        		{% endif %}
+
+			        	{% else %}
+			        		<form action="{% url 'apply_job' post.id %}" method="post">
+		                        {% csrf_token %}
+		                        <input type="hidden" name="post" value="{{ post.id }}">
+		                        <input type="submit" class="btn btn-outline-white-primary"
+		                               value="Apply"/>
+		                    </form>
+			        	
+		        		{% endif %}
+		        </div>   	
+			    
+				<div>
+				    <p class="article-content"> <span style="font-weight: 600">Description: </span> <br>{{ object.job_description }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Total pay:</span> Rs. {{ object.stipend}}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Start date: </span> {{ object.start_date }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">End date: </span> {{ object.end_date }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Start time: </span> {{ object.start_time }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">End time: </span> {{ object.end_time }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Skills required: </span> <br> {{ object.skills_reqd }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Vacancy:</span> {{ object.vacancy }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Address:</span><br> {{ object.address }}</p>
+			  </div>
+			</article>
+	</div>
+</div>
+
 {% endblock content %}

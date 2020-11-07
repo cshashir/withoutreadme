@@ -16,13 +16,39 @@
   	</div>
 </div>
 
-<div class="navbar-nav">
+<div >
 	{% if user.is_authenticated and user.is_fellow %}
 		{% if object.is_hired %}
-			<a class= "btn btn-success btn-sm mt-1 mb-1" href="#">Hired. Associate would join you soon. Thank You!</a>
+		<a class= "btn btn-success btn-sm mt-1 mb-1" href="#">Hired. Associate would join you soon. Thank You!</a>
+			{% if object.associate_is_rated %}
+				<div class= "content-section">
+					<h4> Your review</h4>
+					<p> Rated: {{ object.associate_rating }}</p>
+					<p> Comment: {{ object.associate_comment }}</p>
+				</div>
+				
+			{% else %}
+				<div class= "content-section">
+					<h4> Write Your Review</h4>
+					<form class="review-form" action="{% url 'associate_rating' object.id %}" method= "POST">
+						{% csrf_token %}
+						<div class= "form-group">
+							 <textarea class="form-control" rows="5" name="associate_comment" placeholder="Your review"></textarea>
+						</div>
+						<div>
+							<label for="quantity">Your Rating:</label>
+								<input type="number" id="quantity" name="associate_rating" min="1" max="5" value="1">
+						</div>
+						<div class= "form-group" align="right">
+							<button class= "btn btn-outline-info" type="submit"> Submit</button>				
+						</div>
+					</form>
+				</div>
+			{% endif %}
 		{% else %}
 			<a class= "btn btn-success btn-sm mt-1 mb-1" href="{% url 'hire_associate' object.id %}">Hire</a>
 		{% endif %}
 	{% endif %}
 </div>
 {% endblock content %}
+

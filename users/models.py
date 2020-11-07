@@ -25,7 +25,10 @@ class ProfileFellow(models.Model):
     phone = models.CharField("Phone number (without +91 or 0): 88xxx xxx88", default='', max_length=10) 
     fellow = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default_fellow.png', upload_to='profile_pics_fellow')
+    estd = models.PositiveIntegerField("Establishment year", default='1998', blank=False, validators=[MaxValueValidator(9999999999)])
     is_fellow = models.BooleanField(default=True)
+    city = models.CharField(max_length=15, default='')
+    address = models.TextField(default='Reporting Address')
 
     def __str__(self):
         return f'{self.fellow.username} ProfileFellow'
@@ -46,9 +49,9 @@ class ProfileAssociate(models.Model):
     first_name = models.CharField(default='', max_length=15)
     last_name = models.CharField(default='', max_length=15)
     gender = models.CharField(default='Male/Female', max_length=6)
-    phone = models.CharField("Phone number (without +91 or 0): 88xxx xxx88", default='', max_length=10, blank=False)
-    aadhaar = models.PositiveIntegerField("UIDAI (Aadhaar) number: (will be used for verification purpose)", default='0', blank=False, validators=[MaxValueValidator(9999999999999999)])
-    date_of_birth = models.DateField("Date of birth: (yyyy/mm/dd)", auto_now_add=False, auto_now=False, blank=False,default=timezone.now)
+    phone = models.PositiveIntegerField("Phone number (without +91 or 0): 88xxx xxx88", default='', blank=False, validators=[MaxValueValidator(9999999999)])
+    aadhaar = models.PositiveIntegerField("UIDAI (Aadhaar) number: (will be used for verification purpose)", default='', blank=False, validators=[MaxValueValidator(9999999999999999)])
+    date_of_birth = models.DateField("Date of birth: (yyyy-mm-dd)", auto_now_add=False, auto_now=False, blank=False,default=timezone.now)
     image = models.ImageField(default='default_associate.png', upload_to='profile_pics_associate')
     max_qualification = models.CharField(default='', max_length=25)
     ssc_score = models.FloatField("10th score (%):", default='100')
@@ -57,6 +60,7 @@ class ProfileAssociate(models.Model):
     work_ex = models.TextField(default='Enter your work experience if any', max_length=300)
     last_updated = models.DateTimeField(default=datetime.now())
     punctuality_score = models.PositiveIntegerField(default='0')
+    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.associate.username} ProfileAssociate'
@@ -73,11 +77,31 @@ class ProfileAssociate(models.Model):
 
 
 class Application(models.Model):
+    AssociateRate = (
+        ('New','New'),
+        ('True','True'),
+        ('False','False'),
+    )
+    FellowRate = (
+        ('New','New'),
+        ('True','True'),
+        ('False','False'),
+    )
     associate = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='applicants')
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(default=timezone.now)
+    sent_to_emplorer = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
     is_hired = models.BooleanField(default=False)
+    associate_rating = models.PositiveIntegerField(default=1, validators=[MaxValueValidator(5)])
+    fellow_rating = models.IntegerField(default=1, validators=[MaxValueValidator(5)])
+    associate_comment = models.CharField(default='', max_length=300, blank=True)
+    fellow_comment = models.CharField(default='', max_length=300, blank=True)
+    associate_is_rated = models.BooleanField(default=False)
+    fellow_is_rated = models.BooleanField(default=False)
+    associate_rating_status = models.CharField(choices=AssociateRate, max_length=5, default='New')
+    fellow_rating_status = models.CharField(choices=FellowRate, max_length=5, default='New')
 
     class Meta:
         unique_together = ['associate', 'post']

@@ -1,37 +1,33 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
 from django.conf import settings
+
+from .models import Post
+from users.forms import ContactUsForm
 from users.models import User
-
-
-# def home(request):
-#     context = {
-#         'posts': Post.objects.all()
-#     }
-#     return render(request, 'blog/home.html', context)
 
 
 class PostListView(ListView):
     model = Post
-    template_name = 'blog/home.html'  # <app>/<model>_<viewtype>.html
+    template_name = 'blog/jobs.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'posts'
     ordering = ['-post_date']
-    paginate_by = 3
+    paginate_by = 5
 
 
 class UserPostListView(ListView):
     model = Post
     template_name = 'blog/fellow_posts.html'  # <app>/<model>_<viewtype>.html
-    context_object_name = 'posts'
-    paginate_by = 3
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         fellow = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Post.objects.filter(fellow=fellow).order_by('-post_date')
+        context['posts'] = Post.objects.filter(fellow=fellow).order_by('-post_date')
+        context['fellow'] = fellow
+        return context
 
 
 class PostDetailView(DetailView):
@@ -92,6 +88,10 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
+def home(request):
+    return render(request, 'blog/home.html', {' title': 'Home'})
+
+
 def about(request):
     return render(request, 'blog/about.html', {' title': 'About'})
 
@@ -100,8 +100,24 @@ def career(request):
     return render(request, 'blog/career.html', {' title': 'Career'})
 
 
+# def contactus(request):
+#     return render(request, 'blog/contactus.html', {' title': 'Contact us'})
+
 def contactus(request):
-    return render(request, 'blog/contactus.html', {' title': 'Contact us'})
+    if request.method == 'POST':
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Partshala would contact you soon. Thank you for showing interest!')
+            return redirect('contactus')
+    else:
+        form = ContactUsForm(request.POST)
+
+    context = {
+        'form': form,
+    }
+
+    return render(request,'blog/contactus.html', context)
 
 
 def faqs(request):

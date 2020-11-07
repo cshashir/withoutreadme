@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Avg
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import Http404, HttpResponseRedirect
@@ -8,6 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, DetailView
 from django.conf import settings
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import *
 from blog.models import *
@@ -55,10 +57,13 @@ def user_login(request):
             username = request.POST['username']
             password = request.POST['password']
             user = authenticate(username=username, password=password)
-            if user.is_fellow:
+            if user is None:
+                messages.warning(request, f'Please enter correct username and password. Sing up if you are new to Partshala')
+                return redirect('login')
+            elif user.is_fellow:
                 login(request, user)
                 return redirect('profile_fellow')
-            if user.is_associate:
+            else:
                 login(request, user)
                 return redirect('profile_associate')
     else:
@@ -70,7 +75,7 @@ def user_login(request):
     return render(request, 'users/login.html', context)
 
 
-@login_required
+@login_required(login_url=reverse_lazy('login'))
 def profile_fellow(request):
     if request.method == 'POST':
         u_form = FellowUpdateForm(request.POST, instance=request.user.profilefellow)
@@ -94,7 +99,7 @@ def profile_fellow(request):
     return render(request, 'users/profile_fellow.html', context)
 
 
-@login_required
+@login_required(login_url=reverse_lazy('login'))
 def profile_associate(request):
     if request.method == 'POST':
         u_form = AssociateUpdateForm(request.POST, instance=request.user.profileassociate)
@@ -235,3 +240,67 @@ class AssociateApplicationListView(ListView):
         # return Applicants.objects.filter(user=self.request.user)
         # associate = get_object_or_404(User, username=self.kwargs.get('username'))
         return Application.objects.filter(associate=self.request.user).order_by('-created_at')
+
+
+@login_required(login_url=reverse_lazy('login'))
+def associate_rating(request, application_id=None):
+    if request.method == 'POST':
+        form = AssociateRateForm(request.POST)
+        if form.is_valid():
+            application = Application.objects.get(id=application_id)
+            application.associate_rating = form.cleaned_data['associate_rating']
+            application.associate_comment = form.cleaned_data['associate_comment']
+            application.associate_is_rated = True
+            application.save()
+            messages.success(request, f'Your review has been submitted. Thank you!')
+            return redirect('hire_associate_detail', application_id=application_id)
+        else:
+            form = AssociateRateForm(request.POST)
+    return redirect('hire_associate_detail', application_id=application_id)
+
+
+
+class ApplicationDetailView(DetailView):
+    model = Application
+    template_name = 'users/application_detail.html'
+    context_object_name = 'application'
+    pk_url_kwarg = 'application_id'
+
+    def get_object(self, queryset=None):
+        obj = super(ApplicationDetailView, self).get_object(queryset=queryset)
+        if obj is None:
+            raise Http404("Application doesn't exist")
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+        except Http404:
+            # raise error
+            raise Http404("Application doesn't exist")
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        objec = Application.objects.filter(id=self.kwargs['application_id'])
+        context['author'] = Application.objects.filter(id=self.kwargs['application_id'])
+        context['rating'] = Application.objects.filter(fellow_is_rated=True).aggregate(Avg('fellow_rating'))
+        return context
+
+
+@login_required(login_url=reverse_lazy('login'))
+def fellow_rating(request, application_id=None):
+    if request.method == 'POST':
+        form = FellowRateForm(request.POST)
+        if form.is_valid():
+            application = Application.objects.get(id=application_id)
+            application.fellow_rating = form.cleaned_data['fellow_rating']
+            application.fellow_comment = form.cleaned_data['fellow_comment']
+            application.fellow_is_rated = True
+            application.save()
+            messages.success(request, f'Your review has been submitted. Thank you!')
+            return redirect('application_detail', application_id=application_id)
+        else:
+            form = AssociateRateForm(request.POST)
+    return redirect('application_detail', application_id=application_id)

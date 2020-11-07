@@ -1,15 +1,31 @@
 {% extends "blog/base.html" %}
 {% block content %}
-	<h1 class="mb-3" >{{ view.kwargs.username }}</h1>
-	<!-- <article class="media content-section"> -->
-		<!-- <img class="rounded-circle article-img" src="{{ user.profilefellow.image.url }}"> -->
-	<!-- </article> -->
-	<h3 class="mb-3" >Jobs posted ({{ page_obj.paginator.count }} jobs)</h3> 
+<div class="row justify-content-center">
+	<div class="col-12 col-md-9">
+			<article class="media content-section">
+			  <img class="rounded-circle article-img" src="{{ fellow.profilefellow.image.url }}">
+			  <div class="media-body">
+			    <div class="article-metadata">
+					<h1 class="mb-3" >{{ fellow.profilefellow.company_name }}</h1>
+				    <p class="article-content"> <span style="font-weight: 600">Location:</span><br> {{ fellow.profilefellow.city }} </p>
+				    <p class="article-content"> <span style="font-weight: 600">Address:</span><br> {{ fellow.profilefellow.address }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Company Profile:</span><br> {{ fellow.profilefellow.company_profile }}</p>
+				</div>
+			</article>
+	</div>
+</div>
+
+	<div class="row">
+		
+
+	</div>
+	
+	<!-- <h3 class="mb-3" >Jobs posted ({{ page_obj.paginator.count }} jobs)</h3> 
 	{% for post in posts %}
 		<article class="media content-section">
 		  <div class="media-body">
 		    <div class="article-metadata">
-		      <a class="mr-2" href="{% url 'fellow-posts' post.fellow.username %}">{{ post.fellow }}</a>
+		      <a class="mr-2" href="{% url 'fellow-posts' post.fellow.username %}">{{ post.fellow.profilefellow.company_name }}</a>
 		      <small class="text-muted">{{ post.post_date|date:"F d, Y" }}</small>
 		    </div>
 		    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.job_title }}</a></h2>
@@ -38,8 +54,5 @@
 				<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
 				<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
 		{% endif %}
-
-
-
-	{% endif %}
+	{% endif %} -->
 {% endblock content %}

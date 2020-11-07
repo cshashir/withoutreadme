@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
+from blog.models import ContactUs
 
 
 class UserLoginForm(forms.Form):
@@ -43,7 +44,7 @@ class AssociateUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ProfileAssociate
-        fields = ['first_name', 'last_name','date_of_birth', 'max_qualification','ssc_score', 'phone', 'aadhaar', 'associate_bio', 'work_ex']
+        fields = ['first_name', 'last_name','date_of_birth', 'gender', 'max_qualification','ssc_score', 'phone', 'aadhaar', 'associate_bio', 'work_ex']
 
 
 class AssociatePicUpdateForm(forms.ModelForm):
@@ -62,3 +63,24 @@ class ApplyJobForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ['post']
+
+
+class AssociateRateForm(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ['associate_rating', 'associate_comment']
+
+
+class FellowRateForm(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ['fellow_rating', 'fellow_comment']
+
+
+class ContactUsForm(forms.ModelForm):
+
+    class Meta:
+        model = ContactUs
+        fields = ['name', 'email','subject', 'comment']

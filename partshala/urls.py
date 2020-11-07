@@ -34,6 +34,8 @@ urlpatterns = [
         path('hire-associate-detail/<int:application_id>/', user_views.ApplicantDetailView.as_view(), name='hire_associate_detail'),
     ])),
     path('apply-job/<int:post_id>/', user_views.ApplyJobView.as_view(), name='apply_job'),
+    path('associate-rate/<int:application_id>/', user_views.associate_rating, name='associate_rating'),
+    path('felow-rating/<int:application_id>/', user_views.fellow_rating, name='fellow_rating'),
     path('associate-dashboard/', user_views.AssociateApplicationListView.as_view(), name='associate_dashboard'),
     path('profile-associate/', user_views.profile_associate, name='profile_associate'),
     path('login/', user_views.user_login, name='login'),
@@ -43,6 +45,7 @@ urlpatterns = [
     path('password-reset/confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name='password_reset_complete'),
     path('', include('blog.urls')),
+    path('application-detail/<int:application_id>/', user_views.ApplicationDetailView.as_view(), name='application_detail'),
 ]
 
 

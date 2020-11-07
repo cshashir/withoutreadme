@@ -9,29 +9,35 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 	<link rel="stylesheet" href="{% static 'blog/main.css' %}">
 
 	{% if title %}
 		<title> partshala - {{ title }}</title>
 	{% else %}
-		<title>partshala Home</title>
+		<title>partshala</title>
 	{% endif %}
 </head>	
 <body>
 	<header class="site-header">
 	  <nav class="navbar navbar-expand-md navbar-dark bg-info fixed-top">
 	    <div class="container">
-	      <a class="navbar-brand mr-4" style="color: white" href="/">partshala</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-	      <span class="navbar-toggler-icon"></span>
-	      </button>
-	      <div class="collapse navbar-collapse" id="navbarToggle">
+
+	      <a class="navbar-brand" style="color: white" href="/">
+		    <img src="/media/uploads/white.svg" width="36" height="36" class="d-inline-block align-top" alt="" loading="lazy"> Partshala
+		  </a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+	      <div class="collapse navbar-collapse" id="navbarNavDropdown">
 	        <div class="navbar-nav mr-auto">
 	          <a class="nav-item nav-link" style="color: white" href="{% url 'blog-home'%}">Home</a>
+	          <a class="nav-item nav-link" style="color: white" href="{% url 'jobs'%}">Jobs</a>
 	          <a class="nav-item nav-link" style="color: white" href="{% url 'about'%}">About</a>
 	          <!-- <a class="nav-item nav-link" style="color: white" href="{% url 'career'%}">Career</a> -->
-	          <a class="nav-item nav-link" style="color: white" href="{% url 'contactus'%}">Contact us</a><!-- 
-	          <a class="nav-item nav-link" style="color: white" href="{% url 'faqs'%}">FAQs</a> -->
+	          <a class="nav-item nav-link" style="color: white" href="{% url 'contactus'%}">Contact us</a>
+	          <a class="nav-item nav-link" style="color: white" href="{% url 'faqs'%}">FAQs</a>
 	        </div>
 	        <!-- Navbar Right Side -->
 	        <div class="navbar-nav">
@@ -45,9 +51,16 @@
 	        		{% endif %}
 	           		<a class="nav-item nav-link" style="color: white" href="{% url 'logout' %}">Logout</a>
 	        	{% else %}
-	          		<a class="nav-item nav-link" style="color: white" href="{% url 'login' %}">Login</a>
-	          		<a class="nav-item nav-link" style="color: white" href="{% url 'register_fellow' %}"> Employer Register</a>
-	          		<a class="nav-item nav-link" style="color: white" href="{% url 'register_associate' %}">Student Register</a>
+		          		<a class="nav-item nav-link" style="color: white" href="{% url 'login' %}">Login</a><!-- 
+		          		<a class="nav-item nav-link" style="color: white" href="{% url 'register_fellow' %}"> Employer Register</a>
+		          		<a class="nav-item nav-link" style="color: white" href="{% url 'register_associate' %}">Student Register</a> -->
+		          <li class="nav-item dropdown">
+				    <a class="nav-link dropdown-toggle" style="color: white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</a>
+				        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				          <a class="dropdown-item" href="{% url 'register_fellow' %}">To Hire</a>
+				          <a class="dropdown-item" href="{% url 'register_associate' %}">For jobs</a>
+				        </div>
+				   </li>
 	          	{% endif %}
 	        </div>
 	      </div>
@@ -58,7 +71,7 @@
 
 	<main role="main" class="container">
 	  <div class="row">
-	    <div class="col-md-8">
+	    <div class="col-md-12">
 	    	{% if messages %}
 				{% for message in messages %}
 				<div class= "alert alert-{{ message.tags }}">
@@ -79,3 +92,6 @@
 	
 </body>
 </html>
+
+
+

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from datetime import date, datetime
-# from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator
 from django.conf import settings
 from django.urls import reverse
 
@@ -20,7 +20,7 @@ class Post(models.Model):
     end_time = models.TimeField("End time: (HH:MM)", blank=False, null=True)
     fellow = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.CharField(max_length=15, default='')
-    vacancy = models.IntegerField(default='1')
+    vacancy = models.PositiveIntegerField(default=1, validators=[MaxValueValidator(50)])
     address = models.TextField(default='Reporting Address')
     stipend = models.IntegerField(default=0, blank=True)
     filled = models.BooleanField(default=False)
@@ -31,3 +31,13 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'id': self.id})
+
+
+class ContactUs(models.Model):
+    name  = models.CharField(default='',max_length=25, blank=False)
+    email = models.EmailField(default='', max_length=30, blank=False)
+    subject = models.TextField(default='', blank=False)
+    comment = models.TextField(default='', blank=False)
+
+    def __str__(self):
+        return self.name

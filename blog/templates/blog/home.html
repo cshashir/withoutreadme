@@ -1,62 +1,104 @@
 {% extends "blog/base.html" %}
 {% block content %}
-	<div class = <div class="row justify-content-center">
-			<div class="col-lg-150">
-			<div class="breadcrumb_content text-center">
-			<h2>--  How we work  --</h2>
+<div>
+	<div class ="row justify-content-center" style="background-color: #fcc97b; margin: 10px;">
+			<div class="text-center">
+			<h3>--  How Do We Serve  --</h3>
+			</div>
 	</div>
-	<div class="article-hero-image-container"> 
-		<section> 
-			<div> <img src="/media/uploads/how_we_work.png" align="middle" style="height:150px; max-height: 336px; max-width:1100px; width: 730px;">
-			</div> 
-		</section>  
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-10 col-md-2" >
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; min-height: 80px; font-weight: 500;"> Employers post their job requirements </div></div>
+			<div class="col-10 col-md-2">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; ; height: auto; min-height: 80px; font-weight: 500;"> Candidates apply for the job vacancies </div></div>
+			<div class="col-10 col-md-2">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; ; height: auto; min-height: 80px; font-weight: 500;"> Partshala reviews and verifies the candidate's application </div></div>
+			<div class="col-10 col-md-2"> 
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; ; height: auto; min-height: 80px; font-weight: 500;"> We interview the candidate specific to job requirements </div></div>
+			<div class="col-10 col-md-2">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; ; height: auto; min-height: 80px; font-weight: 500;"> Inform employer and deploy candidate to the work place </div></div>		
+		</div>	
 	</div>
+</div>
 
-	<p> </p>
-
-	<p> </p>
-
-	<div class = <div class="row justify-content-center">
-			<div class="col-lg-150">
-			<div class="breadcrumb_content text-center">
-			<h2>--  Jobs  --</h2>
+<div>
+	<div class ="row justify-content-center" style="background-color: #fcc97b; margin: 10px;">
+			<div class="text-center">
+			<h3>--  Job Categories  --</h3>
+			</div>
 	</div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-5 col-md-5">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Retail Staff - Product Stockers </div></div>
+			<div class="col-5 col-md-5">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Data Entry - Book keeping </div></div>
+			<div class="col-5 col-md-5">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Warehouse Operations </div></div>
+			<div class="col-5 col-md-5"> 
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Inventory Maintenance  </div></div>
+			<div class="col-5 col-md-5">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Events Staff - Hospitality </div></div>
+			<div class="col-5 col-md-5">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Advertisement - Survey </div></div>
+			<div class="col-5 col-md-5">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Product Sampler - Promoter </div></div>
+			<div class="col-5 col-md-5">
+				<div class="text-center" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 30px; height: auto; font-weight: 500;"> Food and Product Delivery </div></div>		
+		</div>	
+	</div>
+</div>
+	
 
-	{% for post in posts %}
-		{% if post.is_verified %}
-			<article class="media content-section">
-			  <img class="rounded-circle article-img" src="{{ post.fellow.profilefellow.image.url }}">
-			  <div class="media-body">
-			    <div class="article-metadata">
-			      <a class="mr-2" href="{% url 'fellow-posts' post.fellow %}">{{ post.fellow }}</a>
-			      <small class="text-muted">{{ post.from_date|date:"F d, Y" }}</small>
-			    </div>
-			    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.job_title }}, {{ post.city }}</a></h2>
-			    <p class="article-content">Job description: {{ post.job_description }}</p>
-			    <p class="article-content">Start date: {{ post.start_date }}</p>
-			  </div>
-			</article>
-		{% endif %}
-	{% endfor %}
-	{% if is_paginated %}
-		{% if page_obj.has_previous %}
-			<a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-			<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-		{% endif %}
+<div>
+	<div class ="row justify-content-center" style="background-color: #fcc97b; margin: 10px;">
+			<div class="text-center">
+			<h3>--  Employer benefits  --</h3>
+			</div>
+	</div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 15px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> End-to-end effective and efficient Human Resources management for part-time/ full-time requirements </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> Hire an employee with a credible past record. Thanks to our employee-rating system </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> Prefer a previous employee? Recall them from your past records! </div></div>
+			<div class="col-10"> 
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> One-click recruitement balance sheet for your financial purposes </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 700;"> Avail all these services totally FREE! </div></div>		
+		</div>	
+	</div>
+</div>
 
-		{% for num in page_obj.paginator.page_range %}
-			{% if page_obj.number == num %}
-				<h2 class="btn btn-info mb-4">{{ num }}</h2>
-			{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-				<a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-			{% endif %}
-		{% endfor %}
+<div>
+	<div class ="row justify-content-center" style="background-color: #fcc97b; margin: 10px;">
+			<div class="text-center">
+			<h3>--  Employee benefits  --</h3>
+			</div>
+	</div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 15px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> Partshala commits on the quality of jobs rather quantity so that your work experience counts </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 15px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> Work in your spare time and earn quick cash </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> While you work, use this opportunity to develop your soft skills </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> Easy exposure to the financial world at young age. Understand and start networking for your future goals  </div></div>
+			<div class="col-10"> 
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> Choose jobs based on employer's reviews and ratings.  </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 500;"> Download detailed experience letter. </div></div>
+			<div class="col-10">
+				<div class="text-left" style="border-style: solid; border-width: 2px; border-color: #17a2b8; vertical-align: middle; margin: 10px 0px; padding: 10px; border-radius: 8px; height: auto; font-weight: 700;"> Avail all these services totally FREE! </div></div>		
+		</div>	
+	</div>
+</div>
 
 
-		{% if page_obj.has_next %}
-				<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-				<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-		{% endif %}
-
-	{% endif %}
 {% endblock content %}
+

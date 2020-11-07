@@ -20,7 +20,7 @@
                     <tbody>
                     {% for application in applications %}
                         <tr>
-                            <th><a href="{% url 'post-detail' application.post.id %}">{{ application.post.job_title }}</a></th>
+                            <th><a href="{% url 'application_detail' application.id %}">{{ application.post.job_title }}</a></th>
                             <td>
                                 {% if application.is_hired %}
                                     <span class="badge badge-success"> Accepted</span>

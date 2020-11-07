@@ -1,0 +1,53 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+	<article class="media content-section">
+	  <img class="rounded-circle article-img" src="{{ application.post.fellow.profilefellow.image.url }}">
+	  <div class="media-body">
+	    <div class="article-metadata">
+	      <a class="mr-2" href="{% url 'fellow-posts' application.post.fellow.username %}">{{ object.post.fellow.profilefellow.company_name }}  {{ rating }} Rating {{author}}</a>
+	      <small class="text-muted">{{ object.post.post_date|date:"F d, Y" }}</small>
+
+		    <h2 class="article-title">{{ object.post.job_title }}, {{ object.post.city }} </h2>
+		    <p class="article-content">Description: {{ object.post.job_description }}</p>
+		    <p class="article-content">Stipend: {{ object.post.stipend}}</p>
+		    <p class="article-content">Start date: {{ object.post.start_date }}</p>
+		    <p class="article-content">End date: {{ object.post.end_date }}</p>
+		    <p class="article-content">Start time: {{ object.post.start_time }}</p>
+		    <p class="article-content">End time: {{ object.post.end_time }}</p>
+		    <p class="article-content">Skills required: {{ object.post.skills_reqd }}</p>
+		    <p class="article-content">Vacancy: {{ object.post.vacancy }}</p>
+		    <p class="article-content">Address: {{ object.post.address }}</p>
+	  </div>
+
+	  <div>
+	  		{% if object.fellow_is_rated %}
+				<div class= "content-section">
+					<h4> Your review</h4>
+					<p> Rated: {{ object.fellow_rating }}</p>
+					<p> Comment: {{ object.fellow_comment }}</p>
+				</div>
+				
+			{% else %}
+				<div class= "content-section">
+					<h4> Write Your Review</h4>
+					<form class="review-form" action="{% url 'fellow_rating' object.id %}" method= "POST">
+						{% csrf_token %}
+						<div class= "form-group">
+							 <textarea class="form-control" rows="5" name="fellow_comment" placeholder="Your review"></textarea>
+						</div>
+						<div>
+							<label for="quantity">Your Rating:</label>
+								<input type="number" id="quantity" name="fellow_rating" min="1" max="5" value="1">
+						</div>
+						<div class= "form-group" align="right">
+							<button class= "btn btn-outline-info" type="submit"> Submit</button>				
+						</div>
+					</form>
+				</div>
+			{% endif %}
+	  </div>
+	</article>
+{% endblock content %}

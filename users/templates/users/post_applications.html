@@ -9,8 +9,8 @@
 	<section class="bg-light-gray">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">Applicants for the {{ post.job_title }} position</a></h2>
+                <div class="col-lg-12 mx-auto">
+                    <h3> Applicants for the <a href="{% url 'post-detail' post.id %}"> {{ post.job_title }}</a> positions </h3>
                 </div>
             </div>
         </div>
@@ -21,15 +21,13 @@
                 {% for application in applications %}
                     <div class="col-lg-6">
                         <div class="box applicant">
-                            <h3><a class="article-title" href="{% url 'hire_associate_detail' application.id %}">{{ application.associate }}</a></h3>
-                            <p>
-                                <span class="badge badge-info">Applied {{ application.created_at.astimezone }}</span>
-                            </p>
+                            <h3><a class="article-title" href="{% url 'hire_associate_detail' application.id %}">{{ application.associate.profileassociate.first_name }} {{ application.associate.profileassociate.last_name }}</a></h3>
+                            <p class="badge badge-info"> Applied {{ application.created_at.astimezone }}</p>
                         </div>
                     </div>
                 {% endfor %}
                 {% if post.applicants.count == 0 %}
-                    <h3>No Applicants Applied For This Job</h3>
+                    <h3 class="col-lg-12 mx-auto" style="margin-top: 50">No applicant applied for this job yet</h3>
                 {% endif %}
             </div>
         </div>
