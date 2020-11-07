@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '(hn+v9*p8c#mt-v^uai1!-0fo7o9156w6pubvnwbjyj_nq&h*='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.partshala.co', '15.206.82.101', 'ec2-15-206-82-101.ap-south-1.compute.amazonaws.com']
 
