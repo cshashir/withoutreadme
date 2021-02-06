@@ -1,25 +1,97 @@
 {% extends "blog/base.html" %}
 {% block content %}
-<div class="content-section">
-	<div class="media">
-	    <img class="rounded-circle account-img" src="{{ object.associate.profileassociate.image.url }}">
-	    <div class="media-body">
-	      	<h2 class="account-helang">{{ object.associate.profileassociate.first_name }} {{ object.associate.profileassociate.last_name }}</h2>
-	      	<p class="text-secondary">Gender: {{ application.associate.profileassociate.gender }}</p>
-	      	<p class="text-secondary">Date of Birth: {{ application.associate.profileassociate.date_of_birth }}</p>
-	      	<p class="text-secondary">Work Experience: {{ application.associate.profileassociate.work_ex }}</p>
-	      	<p class="text-secondary">Highest Qualification: {{ application.associate.profileassociate.max_qualification }}</p>
-	      	<p class="text-secondary">10th percentage: {{ application.associate.profileassociate.ssc_score }}</p>
-	      	<p class="text-secondary">10th result: {{ application.associate.profileassociate.ssc_result }}</p>
-	      	<p class="text-secondary">About/ Skill: {{ application.associate.profileassociate.associate_bio }}</p>
-	    </div>
-  	</div>
+<div class="row justify-content-center">
+	<div class="col-12 col-md-9">
+			<article class="media content-section">
+			    <img class="rounded-circle account-img" src="{{ object.associate.profileassociate.image.url }}">
+	            <div class="media-body">
+		      	<h3 class="account-helang">{{ application.associate.profileassociate.first_name }} {{ application.associate.profileassociate.last_name }} | {{application.associate.profileassociate.associate_avg_rating}}<span>&#9733;</span></h3>
+
+	  			<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'associate_record' object.id %}">Past Record</a>
+			    {% if application.is_hired and job_completed %}
+	  				<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'recall' object.id %}">Recall</a>
+	  			{% endif %}
+			</article>
+	</div>
+	<div class="col-12 col-md-9">
+			<article class="media content-section">
+			    <div class="article-metadata">
+				    <p class="article-content"> <span style="font-weight: 600">Gender:</span> {{ application.associate.profileassociate.gender }} </p>
+		    <p class="article-content"> <span style="font-weight: 600">Age:</span> {{ application.associate.profileassociate.age }}  yrs</p>
+		    <p class="article-content"> <span style="font-weight: 600">Work Experience:</span><br> {{ application.associate.profileassociate.work_ex }}</p>
+		    <p class="article-content"> <span style="font-weight: 600">Highest Qualification:</span> {{ application.associate.profileassociate.max_qualification }} </p>
+		    <p class="article-content"> <span style="font-weight: 600">10th percentage:</span> {{ application.associate.profileassociate.ssc_score }}</p>
+		    <p class="article-content"> <span style="font-weight: 600">12th percentage:</span> {{ application.associate.profileassociate.hsc_score }}</p>
+		    <p> <span style="font-weight: 600">Marksheets: </span></p>
+
+		    <a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ssc_marksheet' object.id %}">10th marksheet</a>
+		    <a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'hsc_marksheet' object.id %}">12th marksheet</a>
+
+		    <p class="article-content"> <span style="font-weight: 600">About/ Skills:</span><br> {{ application.associate.profileassociate.associate_bio }}</p>
+				</div>
+			</article>
+	</div>
 </div>
 
 <div >
 	{% if user.is_authenticated and user.is_fellow %}
-		{% if object.is_hired %}
-		<a class= "btn btn-success btn-sm mt-1 mb-1" href="#">Hired. Associate would join you soon. Thank You!</a>
+		{% if application.is_hired %}
+			{% if not job_started and not job_completed  %}
+				<div >
+					<input type="button" class="btn btn-success" value="Hired. Associate would join you soon. Thank You!"/>
+				</div>
+
+			{% elif object.fellow_complained and object.fellows_complaint_resolved %}
+				<div class= "content-section">
+					<h4> Resolved. Thank you!</h4>
+					<p> Subject: {{ object.fellows_complaint_subject }}</p>
+					<p> Comment: {{ object.fellows_complaint }}</p>
+					<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'fellows_complaint_update' object.id %}">Update your complaint</a>
+				</div>
+
+			{% elif object.fellow_complained and not object.fellows_complaint_updating %}
+				<div class= "content-section">
+					<h4> We would reach out to you soon. Thank you!</h4>
+					<p> Subject: {{ object.fellows_complaint_subject }}</p>
+					<p> Comment: {{ object.fellows_complaint }}</p>
+					<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'fellows_complaint_update' object.id %}">Update your complaint</a>
+				</div>
+
+			{% elif object.fellow_complained and object.fellows_complaint_updating %}
+				<div class= "content-section">
+					<h4> Please update your feedback</h4>
+					<form class="review-form" action="{% url 'fellows_complaint_updated' object.id %}" method= "POST">
+						{% csrf_token %}
+						<div class= "form-group">
+							 <input class="form-control" type="text" rows="5" name="fellows_complaint_subject" value="{{ object.fellows_complaint_subject }}">
+						</div>
+						<div class= "form-group">
+							 <textarea class="form-control" rows="5" name="fellows_complaint" >{{ object.fellows_complaint }}</textarea>
+						</div>
+						<div class= "form-group" align="right">
+							<button class= "btn btn-outline-info" type="submit"> Update</button>				
+						</div>
+					</form>
+				</div>
+				
+			{% else %}
+				<div class= "content-section">
+					<h4> Feedback ?</h4>
+					<form class="review-form" action="{% url 'fellows_complaint' object.id %}" method= "POST">
+						{% csrf_token %}
+						<div class= "form-group">
+							 <input class="form-control" type="text" rows="5" name="fellows_complaint_subject" placeholder="Subject">
+						</div>
+						<div class= "form-group">
+							 <textarea class="form-control" rows="5" name="fellows_complaint" placeholder="Please share your feedback or grievance."></textarea>
+						</div>
+						<div class= "form-group" align="right">
+							<button class= "btn btn-outline-info" type="submit"> Submit</button>				
+						</div>
+					</form>
+				</div>
+			{% endif %}
+
 			{% if object.associate_is_rated %}
 				<div class= "content-section">
 					<h4> Your review</h4>
@@ -27,7 +99,7 @@
 					<p> Comment: {{ object.associate_comment }}</p>
 				</div>
 				
-			{% else %}
+			{% elif job_completed %}
 				<div class= "content-section">
 					<h4> Write Your Review</h4>
 					<form class="review-form" action="{% url 'associate_rating' object.id %}" method= "POST">
@@ -36,7 +108,7 @@
 							 <textarea class="form-control" rows="5" name="associate_comment" placeholder="Your review"></textarea>
 						</div>
 						<div>
-							<label for="quantity">Your Rating:</label>
+							<label for="quantity">Your Rating: <span>&#9733;</span></label>
 								<input type="number" id="quantity" name="associate_rating" min="1" max="5" value="1">
 						</div>
 						<div class= "form-group" align="right">
@@ -45,8 +117,13 @@
 					</form>
 				</div>
 			{% endif %}
+		{% elif object.rejected %}
+			<div >
+				<input type="button" class="btn btn-danger" value="Application rejected!"/>
+			</div>
 		{% else %}
-			<a class= "btn btn-success btn-sm mt-1 mb-1" href="{% url 'hire_associate' object.id %}">Hire</a>
+		    <a class= "btn btn-success btn-sm mt-1 mb-1" href="{% url 'hire_associate' object.id %}">Hire</a>
+			<a class= "btn btn-danger btn-sm mt-1 mb-1" href="{% url 'reject_associate' object.id %}">Turn Down</a>
 		{% endif %}
 	{% endif %}
 </div>

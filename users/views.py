@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Avg
+from datetime import datetime
+from django.utils import timezone
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import Http404, HttpResponseRedirect
@@ -58,7 +59,7 @@ def user_login(request):
             password = request.POST['password']
             user = authenticate(username=username, password=password)
             if user is None:
-                messages.warning(request, f'Please enter correct username and password. Sing up if you are new to Partshala')
+                messages.warning(request, f'Please enter correct username and password. Sign up if you are new to Partshala')
                 return redirect('login')
             elif user.is_fellow:
                 login(request, user)
@@ -174,6 +175,21 @@ def hire_associate(request, application_id=None):
     return redirect('hire_associate_detail', application_id=application_id)
 
 
+
+@login_required(login_url=reverse_lazy('login'))
+def reject_associate(request, application_id=None):
+    # try:
+    associate = Application.objects.get(id=application_id)
+    associate.rejected = True
+    associate.save()
+    messages.success(request, f'Associate will be notified. Thank you!')
+    # except IntegrityError as e:
+    #     print(e.message)
+    #     return HttpResponseRedirect(reverse_lazy('profile_fellow'))
+    # return HttpResponseRedirect(reverse_lazy('profile_fellow'))
+    return redirect('hire_associate_detail', application_id=application_id)
+
+
 class ApplicantPerJobView(ListView):
     model = Application
     template_name = 'users/post_applications.html'
@@ -206,6 +222,14 @@ def filled(request, post_id=None):
     return HttpResponseRedirect(reverse_lazy('profile_fellow'))
 
 
+@login_required(login_url=reverse_lazy('login'))
+def recall(request, application_id=None):
+    associate = Application.objects.get(id=application_id)
+    associate.recall = True
+    associate.save()
+    messages.success(request, f'Noted. Associate would apply soon. Thank you!')
+    return redirect('hire_associate_detail', application_id=application_id)
+
 class ApplicantDetailView(DetailView):
     model = Application
     template_name = 'users/hire_associate_detail.html'
@@ -217,21 +241,25 @@ class ApplicantDetailView(DetailView):
             raise Http404("Associate doesn't exists")
         return obj
 
-    def get(self, request, *args, **kwargs):
-        try:
-            self.object = self.get_object()
-        except Http404:
-            # raise error
-            raise Http404("Associate doesn't exists")
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        application = Application.objects.get(id=self.kwargs['application_id'])
+        context['application'] = application
+        context['rating'] = application.associate.profileassociate.associate_avg_rating
+
+        now = datetime.now()
+        if application.post.start_date <= now.date() and application.post.end_date >= now.date() :
+            context['job_started'] = True
+        elif application.post.end_date < now.date() :
+            context['job_completed'] = True
+        return context
 
 
 class AssociateApplicationListView(ListView):
     model = Application
     template_name = 'users/associate_dashboard.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'applications'
-    paginate_by = 3
+    # paginate_by = 3
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(self.request, *args, **kwargs)
@@ -252,6 +280,25 @@ def associate_rating(request, application_id=None):
             application.associate_comment = form.cleaned_data['associate_comment']
             application.associate_is_rated = True
             application.save()
+
+
+            total_applications = Application.objects.count()
+            associate = application.associate
+            j = 0
+            avg = 0
+            i_d = 0
+            for i in range(total_applications):
+                i_d+=1
+                application = Application.objects.get(id=i_d)
+                if application.associate == associate and application.associate_is_rated == True:
+                    avg+=application.associate_rating
+                    j+=1
+            application = Application.objects.get(id=application_id)
+            application.associate.profileassociate.associate_avg_rating = avg/j
+            application.associate.profileassociate.save()
+
+
+            
             messages.success(request, f'Your review has been submitted. Thank you!')
             return redirect('hire_associate_detail', application_id=application_id)
         else:
@@ -283,9 +330,14 @@ class ApplicationDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        objec = Application.objects.filter(id=self.kwargs['application_id'])
-        context['author'] = Application.objects.filter(id=self.kwargs['application_id'])
-        context['rating'] = Application.objects.filter(fellow_is_rated=True).aggregate(Avg('fellow_rating'))
+        objec = Application.objects.get(id=self.kwargs['application_id'])
+        context['reviewer'] = Application.objects.filter(id=self.kwargs['application_id'])
+        context['rating'] = objec.post.fellow.profilefellow.fellow_avg_rating
+
+        now = datetime.now()
+        if objec.post.end_date < now.date() :
+            context['job_done'] = True
+
         return context
 
 
@@ -299,8 +351,179 @@ def fellow_rating(request, application_id=None):
             application.fellow_comment = form.cleaned_data['fellow_comment']
             application.fellow_is_rated = True
             application.save()
+
+
+            total_applications = Application.objects.count()
+            fellow = application.post.fellow
+            j = 0
+            avg = 0
+            i_d = 0
+            for i in range(total_applications):
+                i_d+=1
+                application = Application.objects.get(id=i_d)
+                if application.post.fellow == fellow and application.fellow_is_rated == True:
+                    avg+=application.fellow_rating
+                    j+=1
+            application = Application.objects.get(id=application_id)
+            application.post.fellow.profilefellow.fellow_avg_rating = avg/j
+            application.post.fellow.profilefellow.save()
+
+
             messages.success(request, f'Your review has been submitted. Thank you!')
             return redirect('application_detail', application_id=application_id)
         else:
             form = AssociateRateForm(request.POST)
     return redirect('application_detail', application_id=application_id)
+
+
+
+@login_required(login_url=reverse_lazy('login'))
+def fellows_complaint(request, application_id=None):
+    if request.method == 'POST':
+        form = FellowsComplaintForm(request.POST)
+        if form.is_valid():
+            application = Application.objects.get(id=application_id)
+            application.fellows_complaint_subject = form.cleaned_data['fellows_complaint_subject']
+            application.fellows_complaint = form.cleaned_data['fellows_complaint']
+            application.fellow_complained = True
+            application.save()
+            
+            messages.success(request, f'Your feedback has been submitted. Partshala would contact you soon. Thank you!')
+            return redirect('hire_associate_detail', application_id=application_id)
+        else:
+            form = FellowsComplaintForm(request.POST)
+    return redirect('hire_associate_detail', application_id=application_id)
+
+
+
+
+@login_required(login_url=reverse_lazy('login'))
+def associates_complaint(request, application_id=None):
+    if request.method == 'POST':
+        form = AssociatesComplaintForm(request.POST)
+        if form.is_valid():
+            application = Application.objects.get(id=application_id)
+            application.associates_complaint_subject = form.cleaned_data['associates_complaint_subject']
+            application.associates_complaint = form.cleaned_data['associates_complaint']
+            application.associate_complained = True
+            application.save()
+            
+            messages.success(request, f'Your feedback has been submitted. Partshala would contact you soon. Thank you!')
+            return redirect('application_detail', application_id=application_id)
+        else:
+            form = AssociatesComplaintForm(request.POST)
+    return redirect('application_detail', application_id=application_id)
+
+
+
+@login_required(login_url=reverse_lazy('login'))
+def fellows_complaint_update(request, application_id=None):
+    # try:
+    obj = Application.objects.get(id=application_id)
+    obj.fellows_complaint_resolved = False
+    obj.fellows_complaint_updating = True
+    obj.save()
+    return redirect('hire_associate_detail', application_id=application_id)
+
+
+@login_required(login_url=reverse_lazy('login'))
+def fellows_complaint_updated(request, application_id=None):
+    if request.method == 'POST':
+        form = FellowsComplaintForm(request.POST)
+        if form.is_valid():
+            application = Application.objects.get(id=application_id)
+            application.fellows_complaint_subject = form.cleaned_data['fellows_complaint_subject']
+            application.fellows_complaint = form.cleaned_data['fellows_complaint']
+            application.fellow_complained = True
+            application.fellows_complaint_updating = False
+            application.save()
+            
+            messages.success(request, f'Your feedback has been submitted. Partshala would contact you soon. Thank you!')
+            return redirect('hire_associate_detail', application_id=application_id)
+        else:
+            form = FellowsComplaintForm(request.POST)
+    return redirect('hire_associate_detail', application_id=application_id)
+
+
+
+@login_required(login_url=reverse_lazy('login'))
+def associates_complaint_update(request, application_id=None):
+    # try:
+    obj = Application.objects.get(id=application_id)
+    obj.associates_complaint_resolved = False
+    obj.associates_complaint_updating = True
+    obj.save()
+    return redirect('application_detail', application_id=application_id)
+
+
+@login_required(login_url=reverse_lazy('login'))
+def associates_complaint_updated(request, application_id=None):
+    if request.method == 'POST':
+        form = AssociatesComplaintForm(request.POST)
+        if form.is_valid():
+            application = Application.objects.get(id=application_id)
+            application.associates_complaint_subject = form.cleaned_data['associates_complaint_subject']
+            application.associates_complaint = form.cleaned_data['associates_complaint']
+            application.associate_complained = True
+            application.associates_complaint_updating = False
+            application.save()
+            
+            messages.success(request, f'Your feedback has been submitted. Partshala would contact you soon. Thank you!')
+            return redirect('application_detail', application_id=application_id)
+        else:
+            form = AssociatesComplaintForm(request.POST)
+    return redirect('application_detail', application_id=application_id)
+
+
+def ssc_marksheet(request, application_id=None):
+    application = Application.objects.get(id=application_id)
+
+    context = {
+        'application': application
+    }
+
+    return render(request, 'users/ssc_marksheet.html', context)
+
+
+def hsc_marksheet(request, application_id=None):
+    application = Application.objects.get(id=application_id)
+
+    context = {
+        'application': application
+    }
+
+    return render(request, 'users/hsc_marksheet.html', context)
+
+
+class AssociateJobListView(ListView):
+    model = Application
+    template_name = 'users/associate_record.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'application'
+    pk_url_kwarg = 'application_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        application = Application.objects.get(id=self.kwargs['application_id'])
+        context['application'] = application
+        objec = Application.objects.get(id=self.kwargs['application_id'])
+        associate = objec.associate
+        context['jobs'] = Application.objects.filter(associate=associate).order_by('-created_at')
+        return context
+
+
+class RecruitmentHistoryListView(ListView):
+    model = Post
+    template_name = 'users/recruitment_history.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    # paginate_by = 3
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Post.objects.filter(fellow=self.request.user).order_by('-post_date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = datetime.now().date()
+        return context

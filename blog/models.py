@@ -25,9 +25,25 @@ class Post(models.Model):
     stipend = models.IntegerField(default=0, blank=True)
     filled = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
+    rejection_note = models.TextField(default='Resubmit')
+    no_of_hirings = models.PositiveIntegerField(default=1, validators=[MaxValueValidator(100)])
 
     def __str__(self):
         return self.job_title
+
+    def get_duration(self):
+        duration = (self.end_date - self.start_date).days
+        return duration
+
+    duration = property(get_duration)
+
+
+    def get_total(self):
+        total = self.stipend*self.no_of_hirings
+        return total
+
+    total = property(get_total)
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'id': self.id})

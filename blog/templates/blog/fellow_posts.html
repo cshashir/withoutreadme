@@ -3,12 +3,17 @@
 <div class="row justify-content-center">
 	<div class="col-12 col-md-9">
 			<article class="media content-section">
-			  <img class="rounded-circle article-img" src="{{ fellow.profilefellow.image.url }}">
-			  <div class="media-body">
+			    <img class="rounded-circle article-img" src="{{ fellow.profilefellow.image.url }}">
 			    <div class="article-metadata">
-					<h1 class="mb-3" >{{ fellow.profilefellow.company_name }}</h1>
+					<h3 class="mb-3" >{{ fellow.profilefellow.company_name }} | {{ fellow.profilefellow.fellow_avg_rating }} &#9733;</h3>
+			    </div>
+			</article>
+	</div>
+	<div class="col-12 col-md-9">
+			<article class="media content-section">
+			    <div class="article-metadata">
 				    <p class="article-content"> <span style="font-weight: 600">Location:</span><br> {{ fellow.profilefellow.city }} </p>
-				    <p class="article-content"> <span style="font-weight: 600">Address:</span><br> {{ fellow.profilefellow.address }}</p>
+				    <p class="article-content"> <span style="font-weight: 600">Established:</span><br> {{ fellow.profilefellow.estd }}</p>
 				    <p class="article-content"> <span style="font-weight: 600">Company Profile:</span><br> {{ fellow.profilefellow.company_profile }}</p>
 				</div>
 			</article>

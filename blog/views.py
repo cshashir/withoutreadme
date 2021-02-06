@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.conf import settings
+from datetime import datetime
 
 from .models import Post
 from users.forms import ContactUsForm
@@ -52,6 +53,16 @@ class PostDetailView(DetailView):
         return self.render_to_response(context)
 
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        objec = Post.objects.get(id=self.kwargs['id'])
+
+        now = datetime.now()
+        if objec.start_date <= now.date() :
+            context['job_started'] = True
+        return context
+
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['job_title', 'job_description', 'start_date', 'end_date', 'start_time', 'end_time', 'skills_reqd', 'vacancy', 'stipend', 'city', 'address']
@@ -63,15 +74,20 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
+
     fields = ['job_title', 'job_description', 'start_date', 'end_date', 'start_time', 'end_time', 'skills_reqd', 'vacancy', 'stipend', 'city', 'address']
 
-    def form_valid(self, form):
+
+    def form_valid(self, form):   
         form.instance.fellow = self.request.user
         messages.info(self.request, 'Successfully updated the job!')
         return super().form_valid(form)
 
     def test_func(self):
         post = self.get_object()
+        post.is_verified = False
+        post.is_rejected = False
+        post.save()
         if self.request.user == post.fellow:
             return True
         return False

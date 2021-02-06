@@ -22,7 +22,7 @@ class FellowUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ProfileFellow
-        fields = ['first_name', 'last_name','company_name', 'company_profile', 'phone']
+        fields = ['first_name', 'last_name','company_name', 'estd', 'company_profile', 'city', 'address', 'phone']
 
 
 class FellowPicUpdateForm(forms.ModelForm):
@@ -84,3 +84,19 @@ class ContactUsForm(forms.ModelForm):
     class Meta:
         model = ContactUs
         fields = ['name', 'email','subject', 'comment']
+
+
+
+class FellowsComplaintForm(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ['fellows_complaint_subject', 'fellows_complaint']
+
+
+
+class AssociatesComplaintForm(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ['associates_complaint_subject', 'associates_complaint']

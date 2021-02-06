@@ -25,7 +25,7 @@ SECRET_KEY = '(hn+v9*p8c#mt-v^uai1!-0fo7o9156w6pubvnwbjyj_nq&h*='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.partshala.co', '15.206.82.101', 'ec2-15-206-82-101.ap-south-1.compute.amazonaws.com']
+ALLOWED_HOSTS = ['www.partshala.co', 'partshala.co', '65.0.132.154', 'ec2-65-0-132-154.ap-south-1.compute.amazonaws.com']
 
 
 # Application definition
@@ -129,9 +129,9 @@ USE_TZ = True
 # STATIC_URL = '/static/'
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),] # new
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # new
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage' # new
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),] # new
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') # new
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage' # new
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -147,6 +147,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'cshashir@gmail.com'
-EMAIL_HOST_PASSWORD = 'wosixrrqllyrueoy'
+EMAIL_HOST_PASSWORD = 'ztgiqifpxizprejn'
 
 TIME_INPUT_FORMATS = ('%H:%M',)

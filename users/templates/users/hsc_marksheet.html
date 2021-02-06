@@ -1,0 +1,11 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+	{% if application.associate.profileassociate.hsc_result %}
+		<img src="{{ application.associate.profileassociate.hsc_result.url }}">
+	{% else %}
+		<p> <span style="font-weight: 600">12th Marksheet: </span>Not Available</p>
+	{% endif %}
+
+{% endblock content %}

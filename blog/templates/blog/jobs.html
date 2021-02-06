@@ -3,7 +3,7 @@
 	<div class = <div class="row justify-content-center">
 			<div class="col-lg-150">
 			<div class="breadcrumb_content text-center">
-			<h2>--  Jobs  --</h2>
+			<h2>&#xab; &#xab;  Jobs  &#xbb; &#xbb;</h2>
 	</div>
 
 	{% for post in posts %}
@@ -16,7 +16,7 @@
 			      <small class="text-muted">{{ post.post_date }}</small>
 			    </div>
 			    <h2><a class="article-title" style="color: #4f8edc;" href="{% url 'post-detail' post.id %}">{{ post.job_title }}, {{ post.city }}</a></h2>
-			    <p class="article-content" style="margin-bottom: 0rem;"> <span style="font-weight: 600"> Total pay:</span> Rs.{{ post.stipend }}</p>
+			    <p class="article-content" style="margin-bottom: 0rem;"> <span style="font-weight: 600"> Total pay:</span> &#8377; {{ post.stipend }}</p>
 			    <p class="article-content" style="margin-bottom: 0rem;"> <span style="font-weight: 600">  Start date:</span>{{ post.start_date|date:"F d, Y" }}</p>
 			  </div>
 			</article>

@@ -28,13 +28,25 @@ urlpatterns = [
     path('register-associate/', user_views.register_associate, name='register_associate'),
     path('profile-fellow/', include([
         path('', user_views.profile_fellow, name='profile_fellow'),
+        path('recruitment-history/', user_views.RecruitmentHistoryListView.as_view(), name='recruitment_history'),
         path('applications/<int:post_id>/', user_views.ApplicantPerJobView.as_view(), name='post_applications'),
         path('mark-filled/<int:post_id>/', user_views.filled, name='post-mark-filled'),
         path('hire-associate/<int:application_id>/', user_views.hire_associate, name='hire_associate'),
+        path('reject-associate-associate/<int:application_id>/', user_views.reject_associate, name='reject_associate'),
         path('hire-associate-detail/<int:application_id>/', user_views.ApplicantDetailView.as_view(), name='hire_associate_detail'),
+        path('hire-associate-recall/<int:application_id>/', user_views.recall, name='recall'),
+        path('hire-associate-detail/<int:application_id>/ssc-marksheet/', user_views.ssc_marksheet, name='ssc_marksheet'),
+        path('hire-associate-detail/<int:application_id>/hsc-marksheet/', user_views.hsc_marksheet, name='hsc_marksheet'),
+        path('hire-associate-detail/<int:application_id>/associate-record/', user_views.AssociateJobListView.as_view(), name='associate_record'),
     ])),
     path('apply-job/<int:post_id>/', user_views.ApplyJobView.as_view(), name='apply_job'),
     path('associate-rate/<int:application_id>/', user_views.associate_rating, name='associate_rating'),
+    path('fellows-complaint/<int:application_id>/', user_views.fellows_complaint, name='fellows_complaint'),
+    path('fellows-complaint-update/<int:application_id>/', user_views.fellows_complaint_update, name='fellows_complaint_update'),
+    path('fellows-complaint-updated/<int:application_id>/', user_views.fellows_complaint_updated, name='fellows_complaint_updated'),
+    path('associates-complaint/<int:application_id>/', user_views.associates_complaint, name='associates_complaint'),
+    path('associates-complaint-update/<int:application_id>/', user_views.associates_complaint_update, name='associates_complaint_update'),
+    path('associates-complaint-updated/<int:application_id>/', user_views.associates_complaint_updated, name='associates_complaint_updated'),
     path('felow-rating/<int:application_id>/', user_views.fellow_rating, name='fellow_rating'),
     path('associate-dashboard/', user_views.AssociateApplicationListView.as_view(), name='associate_dashboard'),
     path('profile-associate/', user_views.profile_associate, name='profile_associate'),
@@ -46,6 +58,7 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name='password_reset_complete'),
     path('', include('blog.urls')),
     path('application-detail/<int:application_id>/', user_views.ApplicationDetailView.as_view(), name='application_detail'),
+
 ]
 
 

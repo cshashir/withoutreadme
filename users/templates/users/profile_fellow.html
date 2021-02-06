@@ -6,8 +6,9 @@
 		<div class="media">
 		    <img class="rounded-circle account-img" src="{{ user.profilefellow.image.url }}">
 		    <div class="media-body">
-		      <h2 class="account-heading">{{ user.username }}</h2>
+		      <h2 class="account-heading">{{ user.profilefellow.fellow }}</h2>
 		      <p class="text-secondary">{{ user.email }}</p>
+              <a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'recruitment_history' %}">Recruitment History</a>
 		    </div>
 		</div>
 		<form method= "POST" enctype='multipart/form-data'>
@@ -40,34 +41,35 @@
                         <tr>
                             <th><a href="{% url 'post-detail' post.id %}">{{ post.job_title }}</a></th>
                             <td>
-                                {% if post.is_verified == False %}
+                                {% if post.is_verified == False and post.is_rejected == False %}
                                     <span class="badge badge-success">Under review</span>
+                                {% elif post.is_rejected %}
+                                    <span class="badge badge-warning">Rejected. Please resubmit</span>
                                 {% elif post.filled %}
-                                    <span class="badge badge-success">Filled</span>
+                                    <span class="badge badge-primary">Filled</span>
                                 {% else %}
-                                    <span class="badge badge-secondary">{{ post.applicants.count }} applied for {{ post.vacancy }} vacancies</span>
+                                    <span class="badge badge-secondary">{{ post.applicants.count }}/{{ post.vacancy }}</span>
                                 {% endif %}
                             </td>
                             <td>{{ post.start_date|date:"F d, Y" }}</td>
                             <!-- <td>{{ job.last_date }}</td> -->
                             <td>
-                                <a href="{% url 'post_applications' post.id %}" class="btn btn-success">
-                                    <i class="fa fa-users"></i>{{ post.applicants.count}}  <span class="hidden-xs hidden-sm">Applicants</span>
-                                </a>
+                                <a href="{% url 'post_applications' post.id %}">{{ post.applicants.count}} applied</a>
                             </td>
                             <td>
-                                <br>
-                                {% if post.is_verified == False %}
+                                {% if post.is_verified == False and post.is_rejected == False %}
                                     <span class="badge badge-success">Under review</span>
-                                {% elif post.filled %}
-                                <a href="{% url 'post-update' post.id %}" class="btn btn-outline-white-secondary">
-                                    <i class="fa fa-times-circle-o"></i>Reopen
+                                {% elif post.is_rejected %}
+                                    <span class="badge badge-warning">{{ post.rejection_note }} </span>
                                 </a>
+                                {% elif post.filled %}
+                                    <i class="fa fa-check-circle-o"></i>
+                                    <span >Marked as filled</span>
                                 {% else %}
-                                    <a href="{% url 'post-mark-filled' post.id %}" class="btn btn-outline-white-secondary">
+                                    <a href="{% url 'post-mark-filled' post.id %}">
                                         <i class="fa fa-check-circle-o"></i>
-                                        <span class="hidden-xs hidden-sm">Mark as </span>filled
-                                    </a><br>
+                                        <span >Mark as filled</span>
+                                    </a>
                                 {% endif %}
                             </td>
                         </tr>
