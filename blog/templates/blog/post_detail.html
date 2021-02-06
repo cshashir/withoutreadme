@@ -20,57 +20,59 @@
 			</article>
 	</div>
 	<div class="col-12 col-md-9">
-			    <div class="navbar-nav">
-		        		{% if user.is_authenticated and user.is_fellow %}
-		        			{% if user == post.fellow and not post.filled and not job_started %}
-					      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
-					      		<a class= "btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
-					      	{% elif user == post.fellow and job_started %}
-					      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="#">Duplicate (currently not functional)</a>
-							{% endif %}
+		<!-- <article class="media content-section"> -->
+		    <div class="navbar-nav">
+	        		{% if user.is_authenticated and user.is_fellow %}
+	        			{% if user == post.fellow and not post.filled and not job_started %}
+				      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
+				      		<a class= "btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
+				      	{% elif user == post.fellow and job_started %}
+				      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="#">Duplicate (currently not functional)</a>
+						{% endif %}
 
-		        		{% elif user.is_authenticated and user.is_associate %}
-		        			{% is_already_applied post request.user as is_applied %}
-		        			{% is_already_hired post request.user as is_hired %}
-		                    {% if is_applied and not is_hired %}
-		                        <input type="button" class="btn btn-success" value="Applied. Under review"/>
-		                    {% elif is_hired %}
-		                    	<input type="button" class="btn btn-success" value="Accepted."/>
-		                    {% else %}
-			      				<form action="{% url 'apply_job' post.id %}" method="post">
-			                        {% csrf_token %}
-			                        <input type="hidden" name="post" value="{{ post.id }}">
-			                        <input type="submit" class="btn btn-primary"
-			                               value="Apply"/>
-			                    </form>
-			        		{% endif %}
-
-			        	{% else %}
-			        		<form action="{% url 'apply_job' post.id %}" method="post">
+	        		{% elif user.is_authenticated and user.is_associate %}
+	        			{% is_already_applied post request.user as is_applied %}
+	        			{% is_already_hired post request.user as is_hired %}
+	                    {% if is_applied and not is_hired %}
+	                        <input type="button" class="btn btn-success" value="Applied. Under review"/>
+	                    {% elif is_hired %}
+	                    	<input type="button" class="btn btn-success" value="Accepted."/>
+	                    {% else %}
+		      				<form action="{% url 'apply_job' post.id %}" method="post">
 		                        {% csrf_token %}
 		                        <input type="hidden" name="post" value="{{ post.id }}">
-		                        <input type="submit" class="btn btn-outline-white-primary"
+		                        <input type="submit" class="btn btn-primary"
 		                               value="Apply"/>
 		                    </form>
-			        	
 		        		{% endif %}
-		        </div>   	
+
+		        	{% else %}
+		        		<form action="{% url 'apply_job' post.id %}" method="post">
+	                        {% csrf_token %}
+	                        <input type="hidden" name="post" value="{{ post.id }}">
+	                        <input type="submit" class="btn btn-success"
+	                               value="Apply"/>
+	                    </form>
+		        	
+	        		{% endif %}
+	        </div>
+	    <!-- </article> -->
+	    <article class="media content-section">		    
+			<div>
+			    <p class="article-content"> <span style="font-weight: 600">Description: </span> <br>{{ object.job_description }}</p>
+			    <p class="article-content"> <span style="font-weight: 600">Total pay:</span> &#8377; {{ object.stipend}}</p>
+			    <p class="article-content"> <span style="font-weight: 600">Start date: </span> {{ object.start_date }}</p>
+			    <p class="article-content"> <span style="font-weight: 600">End date: </span> {{ object.end_date }}</p>
+			    <p class="article-content"> <span style="font-weight: 600">Start time: </span> {{ object.start_time }}</p>
+			    <p class="article-content"> <span style="font-weight: 600">End time: </span> {{ object.end_time }}</p>
+			    <p class="article-content"> <span style="font-weight: 600">Skills required: </span> <br> {{ object.skills_reqd }}</p>
+			    <p class="article-content"> <span style="font-weight: 600">Vacancy:</span> {{ object.vacancy }}</p>
 			    
-				<div>
-				    <p class="article-content"> <span style="font-weight: 600">Description: </span> <br>{{ object.job_description }}</p>
-				    <p class="article-content"> <span style="font-weight: 600">Total pay:</span> &#8377; {{ object.stipend}}</p>
-				    <p class="article-content"> <span style="font-weight: 600">Start date: </span> {{ object.start_date }}</p>
-				    <p class="article-content"> <span style="font-weight: 600">End date: </span> {{ object.end_date }}</p>
-				    <p class="article-content"> <span style="font-weight: 600">Start time: </span> {{ object.start_time }}</p>
-				    <p class="article-content"> <span style="font-weight: 600">End time: </span> {{ object.end_time }}</p>
-				    <p class="article-content"> <span style="font-weight: 600">Skills required: </span> <br> {{ object.skills_reqd }}</p>
-				    <p class="article-content"> <span style="font-weight: 600">Vacancy:</span> {{ object.vacancy }}</p>
-				    
-			        {% if is_hired %}
-			            <p class="article-content"> <span style="font-weight: 600">Address:</span><br> {{ object.address }}</p>
-			        {% endif %}
-			  </div>
-			</article>
+		        {% if is_hired %}
+		            <p class="article-content"> <span style="font-weight: 600">Address:</span><br> {{ object.address }}</p>
+		        {% endif %}
+		    </div>
+		</article>
 	</div>
 </div>
 
