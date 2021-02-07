@@ -84,10 +84,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'partshaladb-1',
-        'USER' : 'maili',
+        'USER' : 'admin',
         'PASSWORD' : 'Maili1234',
-        'HOST' : '',
-        'PORT' : '',
+        'HOST' : 'partshaladb-1.c44sn0xu08up.ap-south-1.rds.amazonaws.com',
+        'PORT' : '3306',
     }
 }
 
