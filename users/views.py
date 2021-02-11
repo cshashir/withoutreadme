@@ -106,23 +106,26 @@ def profile_associate(request):
         u_form = AssociateUpdateForm(request.POST, instance=request.user.profileassociate)
         p_form = AssociatePicUpdateForm(request.POST, request.FILES, instance=request.user.profileassociate)
         d_form = SSCResultForm(request.POST, request.FILES, instance=request.user.profileassociate)
+        e_form = HSCResultForm(request.POST, request.FILES, instance=request.user.profileassociate)
         if u_form.is_valid() and p_form.is_valid() and d_form.is_valid():
             u_form.save()
             p_form.save()
             d_form.save()
+            e_form.save()
             messages.success(request, f'Your account has been updated!')
             return redirect('profile_associate')
     else:
         u_form = AssociateUpdateForm(instance=request.user.profileassociate)
         p_form = AssociatePicUpdateForm(instance=request.user.profileassociate)
         d_form = SSCResultForm(instance=request.user.profileassociate)
-
+        e_form = HSCResultForm(request.POST, request.FILES, instance=request.user.profileassociate)
     # logged_in_associate_applications = Post.objects.filter(associate=request.user).order_by('-date')
 
     context = {
         'u_form': u_form,
         'p_form': p_form,
         'd_form': d_form,
+        'e_form': e_form
         # 'logged_in_associate_applications': logged_in_associate_applications
     }
     return render(request, 'users/profile_associate.html', context)
