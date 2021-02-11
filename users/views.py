@@ -125,7 +125,7 @@ def profile_associate(request):
         'u_form': u_form,
         'p_form': p_form,
         'd_form': d_form,
-        'e_form': e_form
+        'e_form': e_form,
         # 'logged_in_associate_applications': logged_in_associate_applications
     }
     return render(request, 'users/profile_associate.html', context)
