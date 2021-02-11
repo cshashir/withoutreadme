@@ -87,14 +87,21 @@ WSGI_APPLICATION = 'partshala.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'partshaladb-1',
-        'USER' : 'admin',
-        'PASSWORD' : 'Maili1234',
-        'HOST' : 'partshaladb-1.c44sn0xu08up.ap-south-1.rds.amazonaws.com',
-        'PORT' : '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'partshaladb-1',
+#         'USER' : 'admin',
+#         'PASSWORD' : 'Maili1234',
+#         'HOST' : 'partshaladb-1.c44sn0xu08up.ap-south-1.rds.amazonaws.com',
+#         'PORT' : '3306',
+#     }
+# }
 
 # declaration for custom User model
 AUTH_USER_MODEL = "users.User"
