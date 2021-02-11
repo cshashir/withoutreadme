@@ -57,6 +57,13 @@ class SSCResultForm(forms.ModelForm):
     class Meta:
         model = ProfileAssociate
         fields = ['ssc_result']
+        
+
+
+class HSCResultForm(forms.ModelForm):
+    class Meta:
+        model = ProfileAssociate
+        fields = ['hsc_result']
 
 
 class ApplyJobForm(forms.ModelForm):
