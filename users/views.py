@@ -119,20 +119,12 @@ def profile_associate(request):
         p_form = AssociatePicUpdateForm(instance=request.user.profileassociate)
         d_form = SSCResultForm(instance=request.user.profileassociate)
         e_form = HSCResultForm(request.POST, request.FILES, instance=request.user.profileassociate)
-<<<<<<< HEAD
-=======
-
->>>>>>> 7929935... HSC update in view, profile_associate,form
     # logged_in_associate_applications = Post.objects.filter(associate=request.user).order_by('-date')
 
     context = {
         'u_form': u_form,
         'p_form': p_form,
-<<<<<<< HEAD
-        'e_form': e_form,
-=======
         'd_form': d_form,
->>>>>>> 7929935... HSC update in view, profile_associate,form
         'e_form': e_form,
         # 'logged_in_associate_applications': logged_in_associate_applications
     }
