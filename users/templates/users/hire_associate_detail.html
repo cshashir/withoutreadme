@@ -32,12 +32,6 @@
 			</article>
 	</div>
 </div>
-
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 7929935... HSC update in view, profile_associate,form
 <div class="row justify-content-center">
 	<div class="col-12 col-md-9">
 		<div >
@@ -46,13 +40,10 @@
 					{% if not job_started and not job_completed  %}
 						<div >
 							<input type="button" class="btn btn-success" value="Hired. Associate would join you soon. Thank You!"/>
-<<<<<<< HEAD
-						</div>
 
 					{% elif object.fellow_complained and object.fellows_complaint_resolved %}
 						<div class= "content-section">
 							<h4> Resolved. Thank you!</h4>
-=======
 						</div>
 
 					{% elif object.fellow_complained and object.fellows_complaint_resolved %}
@@ -66,13 +57,10 @@
 					{% elif object.fellow_complained and not object.fellows_complaint_updating %}
 						<div class= "content-section">
 							<h4> We would reach out to you soon. Thank you!</h4>
->>>>>>> 7929935... HSC update in view, profile_associate,form
 							<p> Subject: {{ object.fellows_complaint_subject }}</p>
 							<p> Comment: {{ object.fellows_complaint }}</p>
 							<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'fellows_complaint_update' object.id %}">Update your complaint</a>
 						</div>
-
-<<<<<<< HEAD
 					{% elif object.fellow_complained and not object.fellows_complaint_updating %}
 						<div class= "content-section">
 							<h4> We would reach out to you soon. Thank you!</h4>
@@ -140,7 +128,6 @@
 								</div>
 							</form>
 						</div>
-=======
 					{% elif object.fellow_complained and object.fellows_complaint_updating %}
 						<div class= "content-section">
 							<h4> Please update your feedback</h4>
@@ -200,7 +187,6 @@
 								</div>
 							</form>
 						</div>
->>>>>>> 7929935... HSC update in view, profile_associate,form
 					{% endif %}
 				{% elif object.rejected %}
 					<div >
@@ -212,12 +198,7 @@
 				{% endif %}
 			{% endif %}
 		</div>
-<<<<<<< HEAD
 	</div>
-</div>	
-=======
-    </div>
 </div>
->>>>>>> 7929935... HSC update in view, profile_associate,form
-{% endblock content %}
 
+{% endblock content %}
