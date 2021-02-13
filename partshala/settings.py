@@ -30,7 +30,7 @@ SECRET_KEY = '(hn+v9*p8c#mt-v^uai1!-0fo7o9156w6pubvnwbjyj_nq&h*='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','www.partshala.co', 'partshala.co', '65.0.132.154', 'ec2-65-0-132-154.ap-south-1.compute.amazonaws.com']
+ALLOWED_HOSTS = ['localhost','www.partshala.co', 'partshala.co', '15.207.115.33', 'ec2-15-207-115-33.ap-south-1.compute.amazonaws.com']
 
 
 # Application definition
