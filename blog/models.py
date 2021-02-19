@@ -28,6 +28,7 @@ class Post(models.Model):
     is_rejected = models.BooleanField(default=False)
     rejection_note = models.TextField(default='Resubmit')
     no_of_hirings = models.PositiveIntegerField(default=1, validators=[MaxValueValidator(100)])
+    note_by_partshala = models.TextField(default='')
 
     def __str__(self):
         return self.job_title

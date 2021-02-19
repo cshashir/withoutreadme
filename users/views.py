@@ -273,6 +273,24 @@ class AssociateApplicationListView(ListView):
         return Application.objects.filter(associate=self.request.user).order_by('-created_at')
 
 
+class FellowApplicationListView(ListView):
+    model = Post
+    template_name = 'users/fellow_dashboard.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'logged_in_fellow_posts'
+    # paginate_by = 3
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get_queryset(self):
+        # return Applicants.objects.filter(user=self.request.user)
+        # associate = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Post.objects.filter(fellow=self.request.user).order_by('-post_date')
+
+
+
+
+
 @login_required(login_url=reverse_lazy('login'))
 def associate_rating(request, application_id=None):
     if request.method == 'POST':

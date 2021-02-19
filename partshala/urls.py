@@ -39,6 +39,7 @@ urlpatterns = [
         path('hire-associate-detail/<int:application_id>/hsc-marksheet/', user_views.hsc_marksheet, name='hsc_marksheet'),
         path('hire-associate-detail/<int:application_id>/associate-record/', user_views.AssociateJobListView.as_view(), name='associate_record'),
     ])),
+    path('fellow-dashboard/', user_views.FellowApplicationListView.as_view(), name='fellow_dashboard'),
     path('apply-job/<int:post_id>/', user_views.ApplyJobView.as_view(), name='apply_job'),
     path('associate-rate/<int:application_id>/', user_views.associate_rating, name='associate_rating'),
     path('fellows-complaint/<int:application_id>/', user_views.fellows_complaint, name='fellows_complaint'),

@@ -1,40 +1,48 @@
 {% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-	<div class="content-section">
-	  <div class="media">
-	    <img class="rounded-circle account-img" src="{{ user.profileassociate.image.url }}">
-	    <div class="media-body">
-	      <h2 class="account-heading">{{ user.username }}</h2>
-	      <p class="text-secondary">{{ user.email }}</p>
-	    </div>
-	  </div>
-	  <form method= "POST" enctype='multipart/form-data'>
-			{% csrf_token %}
-			<fieldset class= "form-group">
-				<legend class= "border-bottom mb-4"> Profile Info</legend>
-				{{ u_form| crispy }}
-				{{ p_form| crispy }}
-				{{ d_form| crispy }}
-				{{ e_form| crispy }}
-			</fieldset>
-			<div class= "form-group">
-				<button class= "btn btn-outline-info" type="submit"> Update</button>			
-			</div>
-		</form>
-		<!-- <h1 class="mb-3" >Jobs posted ({{ page_obj.paginator.count }} jobs)</h1>  -->
-		<!-- {% for post in logged_in_fellow_posts %}
-			<article class="media content-section">
-			  <div class="media-body">
-			    <div class="article-metadata">
-			      <a class="mr-2" href="{% url 'fellow-posts' post.fellow.username %}">{{ post.fellow }}</a>
-			      <small class="text-muted">{{ post.from_date|date:"F d, Y" }}</small>
-			    </div>
-			    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.job_title }}</a></h2>
-			    <p class="article-content">Job description: {{ post.job_description }}</p>
-			    <p class="article-content">Vacancy: {{ post.vacancy }}</p>
-			  </div>
-			</article>
-		{% endfor %} -->
-	</div>
+
+{% if not user.profileassociate.is_verified %}
+    <div class="content-section">
+        <span class="text-center" style="font-weight: 600; color: red">Congratulations!!! You would be contacted soon for verification and you can apply for jobs after that.  </span>
+    </div>
+{% endif %}
+
+
+<div class="content-section">
+  <div class="media">
+    <img class="rounded-circle account-img" src="{{ user.profileassociate.image.url }}">
+    <div class="media-body">
+      <h2 class="account-heading">{{ user.username }}</h2>
+      <p class="text-secondary">{{ user.email }}</p>
+    </div>
+  </div>
+  <form method= "POST" enctype='multipart/form-data'>
+		{% csrf_token %}
+		<fieldset class= "form-group">
+			<legend class= "border-bottom mb-4"> Profile Info</legend>
+			{{ u_form| crispy }}
+			{{ p_form| crispy }}
+			{{ d_form| crispy }}
+			{{ e_form| crispy }}
+		</fieldset>
+		<div class= "form-group">
+			<button class= "btn btn-outline-info" type="submit"> Update</button>			
+		</div>
+	</form>
+	<!-- <h1 class="mb-3" >Jobs posted ({{ page_obj.paginator.count }} jobs)</h1>  -->
+	<!-- {% for post in logged_in_fellow_posts %}
+		<article class="media content-section">
+		  <div class="media-body">
+		    <div class="article-metadata">
+		      <a class="mr-2" href="{% url 'fellow-posts' post.fellow.username %}">{{ post.fellow }}</a>
+		      <small class="text-muted">{{ post.from_date|date:"F d, Y" }}</small>
+		    </div>
+		    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.job_title }}</a></h2>
+		    <p class="article-content">Job description: {{ post.job_description }}</p>
+		    <p class="article-content">Vacancy: {{ post.vacancy }}</p>
+		  </div>
+		</article>
+	{% endfor %} -->
+</div>
 {% endblock content %}

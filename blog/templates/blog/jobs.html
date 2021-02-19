@@ -7,7 +7,7 @@
 	</div>
 
 	{% for post in posts %}
-		{% if post.is_verified %}
+		{% if post.is_verified and not post.filled %}
 			<article class="media content-section">
 			  <img class="rounded-circle article-img" src="{{ post.fellow.profilefellow.image.url }}">
 			  <div class="media-body">

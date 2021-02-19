@@ -32,6 +32,8 @@ class ProfileFellow(models.Model):
     city = models.CharField(max_length=15, default='')
     address = models.TextField(default='Reporting Address')
     fellow_avg_rating = models.DecimalField(default=3, max_digits=2, decimal_places=1)
+    is_verified = models.BooleanField(default=False)
+    note_by_partshala = models.TextField(default='')
 
     def __str__(self):
         return f'{self.fellow.username} ProfileFellow'
@@ -72,6 +74,7 @@ class ProfileAssociate(models.Model):
     last_updated = models.DateTimeField(default=datetime.now())
     associate_avg_rating = models.DecimalField(default=3, max_digits=2, decimal_places=1)
     is_verified = models.BooleanField(default=False)
+    note_by_partshala = models.TextField(default='')
 
 
     def get_age(self):
@@ -111,7 +114,7 @@ class Application(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='applicants')
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(default=timezone.now)
-    sent_to_emplorer = models.BooleanField(default=False)
+    sent_to_employer = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     is_hired = models.BooleanField(default=False)
     associate_rating = models.PositiveIntegerField(default=1, validators=[MaxValueValidator(5)])
@@ -133,6 +136,7 @@ class Application(models.Model):
     associates_complaint_resolved = models.BooleanField(default=False)
     associates_complaint_updating = models.BooleanField(default=False)
     recall = models.BooleanField(default=False)
+    note_by_partshala = models.TextField(default='')
 
 
     class Meta:

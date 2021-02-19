@@ -26,18 +26,20 @@
             </tr>
             </thead>
             <tbody>
-            {% for application in applications %}
-                <tr>
-                    <th><a href="{% url 'hire_associate_detail' application.id %}">{{ application.associate.profileassociate.first_name }} {{ application.associate.profileassociate.last_name }}</a></th>
-                    {% if application.is_hired %}
-                    <td>&#10004; Hired</td>
-                    {% elif application.rejected %}
-                    <td>&#10060; Rejected</td>
-                    {% else %}
-                    <td>Under Review</td>
+                {% for application in applications %}
+                    {% if application.sent_to_employer %}
+                        <tr>
+                            <th><a href="{% url 'hire_associate_detail' application.id %}">{{ application.associate.profileassociate.first_name }} {{ application.associate.profileassociate.last_name }}</a></th>
+                            {% if application.is_hired %}
+                            <td>&#10004; Hired</td>
+                            {% elif application.rejected %}
+                            <td>&#10060; Rejected</td>
+                            {% else %}
+                            <td>Under Review</td>
+                            {% endif %}
+                        </tr>
                     {% endif %}
-                </tr>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
     </div>

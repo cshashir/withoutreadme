@@ -44,7 +44,13 @@
 	        	{% if user.is_authenticated %}
 	        		{% if user.is_fellow %}
 	        			<a class="nav-item nav-link" style="color: white" href="{% url 'profile_fellow' %}">Profile</a>
-	        			<a class="nav-item nav-link" style="color: white" href="{% url 'post-create' %}">Add Job</a>
+	        			{% if user.is_verified %}
+	        				<a class="nav-item nav-link" style="color: white" href="{% url 'post-create' %}">Add Job</a>
+	        				<a class="nav-item nav-link" style="color: white" href="{% url 'fellow_dashboard' %}">Dashboard</a>
+	        			{% else %}
+	        				<a class="nav-item nav-link" style="color: white" href="{% url 'profile_fellow' %}">Add Job</a>
+	        				<a class="nav-item nav-link" style="color: white" href="{% url 'fellow_dashboard' %}">Dashboard</a>
+                        {% endif %}
 	        		{% else %}
 	        			<a class="nav-item nav-link" style="color: white" href="{% url 'profile_associate' %}">Profile</a>
 	        			<a class="nav-item nav-link" style="color: white" href="{% url 'associate_dashboard' %}">Dashboard</a>

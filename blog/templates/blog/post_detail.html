@@ -7,6 +7,13 @@
 {% endif %}
 
 {% block content %}
+
+{% if user.is_authenticated and user.is_associate and not user.profileassociate.is_verified %}
+	<div class="content-section">
+        <span class="text-center" style="font-weight: 600; color: red"> You can apply for the job after verification. </span>
+    </div>
+{% endif %}
+
 <div class="row justify-content-center">
 	<div class="col-12 col-md-9">
 			<article class="media content-section">
@@ -30,7 +37,7 @@
 				      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="#">Duplicate (currently not functional)</a>
 						{% endif %}
 
-	        		{% elif user.is_authenticated and user.is_associate %}
+	        		{% elif user.is_authenticated and user.is_associate and user.profileassociate.is_verified %}
 	        			{% is_already_applied post request.user as is_applied %}
 	        			{% is_already_hired post request.user as is_hired %}
 	                    {% if is_applied and not is_hired %}
@@ -46,7 +53,7 @@
 		                    </form>
 		        		{% endif %}
 
-		        	{% else %}
+		        	{% elif not user.is_authenticated %}
 		        		<form action="{% url 'apply_job' post.id %}" method="post">
 	                        {% csrf_token %}
 	                        <input type="hidden" name="post" value="{{ post.id }}">
