@@ -55,6 +55,8 @@ class ContactUs(models.Model):
     email = models.EmailField(default='', max_length=30, blank=False)
     subject = models.TextField(default='', blank=False)
     comment = models.TextField(default='', blank=False)
+    contacted = models.BooleanField(default=False)
+    resolved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
