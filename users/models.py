@@ -4,6 +4,9 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from PIL import Image
 from django.core.validators import MaxValueValidator
+from phonenumber_field.modelfields import PhoneNumberField
+# from phone_field import PhoneField
+
 
 from blog.models import Post
 from django.conf import settings
@@ -25,7 +28,7 @@ class ProfileFellow(models.Model):
     first_name = models.CharField(default='', max_length=15)
     last_name = models.CharField(default='', max_length=15)
     company_profile = models.TextField(default='')
-    phone = models.CharField("Phone number (without +91 or 0): 88xxx xxx88", unique=True,default='9', max_length=10) 
+    phone = PhoneNumberField("Phone number: +9188xxx xxx88", unique=True,null=False, blank=False)
     image = models.ImageField(default='default_fellow.png', upload_to='profile_pics_fellow')
     estd = models.PositiveIntegerField("Establishment year", default='1998', blank=False, validators=[MaxValueValidator(9999999999)])
     is_fellow = models.BooleanField(default=True)
@@ -60,7 +63,7 @@ class ProfileAssociate(models.Model):
     first_name = models.CharField(default='', max_length=15)
     last_name = models.CharField(default='', max_length=15)
     gender = models.CharField(choices=Gender, max_length=6, default='Select')
-    phone = models.PositiveIntegerField("Phone number (without +91 or 0): 88xxx xxx88", unique=True,default='9', blank=False, validators=[MaxValueValidator(9999999999)])
+    phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=True,null=False, blank=False)
     aadhaar = models.PositiveIntegerField("UIDAI (Aadhaar) number: (will be used for verification purpose)", default='9', blank=False, validators=[MaxValueValidator(9999999999999999)])
     date_of_birth = models.DateField("Date of birth: (yyyy-mm-dd)", auto_now_add=False, auto_now=False, blank=False,default=timezone.now)
     image = models.ImageField(default='default_associate.png', upload_to='profile_pics_associate')

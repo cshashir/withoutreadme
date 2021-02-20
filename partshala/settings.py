@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
-    # 'review',
+    'phonenumber_field',
     'mathfilters',
     'django.contrib.admin',
     'django.contrib.auth',
