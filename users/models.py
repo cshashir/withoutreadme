@@ -28,7 +28,7 @@ class ProfileFellow(models.Model):
     first_name = models.CharField(default='', max_length=15)
     last_name = models.CharField(default='', max_length=15)
     company_profile = models.TextField(default='')
-    phone = PhoneNumberField(unique=True,unique=False,null=False, blank=False)
+    phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=False,null=False, blank=False)
     image = models.ImageField(default='default_fellow.png', upload_to='profile_pics_fellow')
     estd = models.PositiveIntegerField("Establishment year", default='1998', blank=False, validators=[MaxValueValidator(9999999999)])
     is_fellow = models.BooleanField(default=True)
