@@ -66,10 +66,10 @@ class HSCResultForm(forms.ModelForm):
         fields = ['hsc_result']
 
 
-class HSCResultForm(forms.ModelForm):
+class DLCopyForm(forms.ModelForm):
     class Meta:
         model = ProfileAssociate
-        fields = ['hsc_result']
+        fields = ['dl_copy']
 
 
 class ApplyJobForm(forms.ModelForm):

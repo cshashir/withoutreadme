@@ -13,7 +13,7 @@
   <div class="media">
     <img class="rounded-circle account-img" src="{{ user.profileassociate.image.url }}">
     <div class="media-body">
-      <h2 class="account-heading">{{ user.username }}</h2>
+      <h4  style="font-size: 1.5rem; font-weight: 600">{{ user.username }}</h4>
       <p class="text-secondary">{{ user.email }}</p>
     </div>
   </div>
@@ -25,6 +25,7 @@
 			{{ p_form| crispy }}
 			{{ d_form| crispy }}
 			{{ e_form| crispy }}
+			{{ dl_form| crispy }}
 		</fieldset>
 		<div class= "form-group">
 			<button class= "btn btn-outline-info" type="submit"> Update</button>			

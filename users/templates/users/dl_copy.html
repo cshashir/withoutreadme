@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+	{% if application.associate.profileassociate.dl_copy %}
+		<div align="center">
+			<p> <span style="font-weight: 600">Driving License: </span></p>
+			<img src="{{ application.associate.profileassociate.dl_copy.url }}" style="height:300px; width: 400px; ">
+		</div>
+	{% else %}
+		<p> <span style="font-weight: 600">Driving License: </span>Not Applicable.</p>
+	{% endif %}
+
+{% endblock content %}

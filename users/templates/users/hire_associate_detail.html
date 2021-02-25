@@ -22,10 +22,11 @@
 		    <p class="article-content"> <span style="font-weight: 600">Highest Qualification:</span> {{ application.associate.profileassociate.max_qualification }} </p>
 		    <p class="article-content"> <span style="font-weight: 600">10th percentage:</span> {{ application.associate.profileassociate.ssc_score }}</p>
 		    <p class="article-content"> <span style="font-weight: 600">12th percentage:</span> {{ application.associate.profileassociate.hsc_score }}</p>
-		    <p> <span style="font-weight: 600">Marksheets: </span></p>
+		    <p> <span style="font-weight: 600">Documents: </span></p>
 
 		    <a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'ssc_marksheet' object.id %}">10th marksheet</a>
 		    <a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'hsc_marksheet' object.id %}">12th marksheet</a>
+		    <a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'dl_copy' object.id %}">Driving License</a>
 
 		    <p class="article-content"> <span style="font-weight: 600">About/ Skills:</span><br> {{ application.associate.profileassociate.associate_bio }}</p>
 				</div>

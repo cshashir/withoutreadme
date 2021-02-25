@@ -8,13 +8,37 @@
 
 {% block content %}
 
-{% if user.is_authenticated and user.is_associate and not user.profileassociate.is_verified %}
-	<div class="content-section">
-        <span class="text-center" style="font-weight: 600; color: red"> You can apply for the job after verification. </span>
-    </div>
-{% endif %}
 
 <div class="row justify-content-center">
+	{% if user.is_authenticated and user.is_associate and not user.profileassociate.is_verified %}
+		<div class="col-12 col-md-9">
+			<article class="media content-section">
+				<div >
+			        <span class="text-center" style="font-weight: 600; color: red"> You can apply for the job after verification. Partshala would contact you soon. &#9200; </span>
+			    </div>
+			</article>
+		</div>
+	{% endif %}
+
+	{% if user.is_authenticated and user.is_fellow and not object.is_verified and not object.is_rejected %}
+		<div class="col-12 col-md-9">
+			<article class="media content-section">
+				    <div >
+				        <span class="text-center" style="font-weight: 600; color: red">Your job will be visible to candidates after verification. Partshala would contact you soon. &#9200;  </span>
+				    </div>
+			</article>
+		</div>
+	{% elif user.is_authenticated and user.is_fellow and not object.is_verified and object.is_rejected %}
+		<div class="col-12 col-md-9">
+			<article class="media content-section">
+			    <div >
+			        <span class="text-center" style="font-weight: 600; color: red">This job post is turned down. Contact Partshala!</span>
+			    </div>
+			</article>
+		</div>
+	{% endif %}
+
+
 	<div class="col-12 col-md-9">
 			<article class="media content-section">
 			    <img class="rounded-circle article-img" src="{{ post.fellow.profilefellow.image.url }}">
@@ -30,9 +54,11 @@
 		<!-- <article class="media content-section"> -->
 		    <div class="navbar-nav">
 	        		{% if user.is_authenticated and user.is_fellow %}
-	        			{% if user == post.fellow and not post.filled and not job_started %}
+	        			{% if user == post.fellow and not post.filled and not job_started and not post.is_verified %}
 				      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
 				      		<a class= "btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
+				      	{% elif user == post.fellow and not post.filled and not job_started and post.is_verified %}
+				      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
 				      	{% elif user == post.fellow and job_started %}
 				      		<a class= "btn btn-secondary btn-sm mt-1 mb-1" href="#">Duplicate (currently not functional)</a>
 						{% endif %}

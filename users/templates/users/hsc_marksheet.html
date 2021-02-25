@@ -3,9 +3,12 @@
 
 {% block content %}
 	{% if application.associate.profileassociate.hsc_result %}
-		<img src="{{ application.associate.profileassociate.hsc_result.url }}">
+		<div align="center"> 
+			<p> <span style="font-weight: 600">12th Marksheet: </span></p>
+			<img src="{{ application.associate.profileassociate.hsc_result.url }}" style="height:600px; width: 400px; ">
+		</div>
 	{% else %}
-		<p> <span style="font-weight: 600">12th Marksheet: </span>Not Available</p>
+		<p> <span style="font-weight: 600">12th Marksheet: </span>Not Applicable</p>
 	{% endif %}
 
 {% endblock content %}

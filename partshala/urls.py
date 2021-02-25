@@ -37,6 +37,7 @@ urlpatterns = [
         path('hire-associate-recall/<int:application_id>/', user_views.recall, name='recall'),
         path('hire-associate-detail/<int:application_id>/ssc-marksheet/', user_views.ssc_marksheet, name='ssc_marksheet'),
         path('hire-associate-detail/<int:application_id>/hsc-marksheet/', user_views.hsc_marksheet, name='hsc_marksheet'),
+        path('hire-associate-detail/<int:application_id>/driving-license/', user_views.dl_copy, name='dl_copy'),
         path('hire-associate-detail/<int:application_id>/associate-record/', user_views.AssociateJobListView.as_view(), name='associate_record'),
     ])),
     path('fellow-dashboard/', user_views.FellowApplicationListView.as_view(), name='fellow_dashboard'),
