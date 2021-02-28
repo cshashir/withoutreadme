@@ -4,6 +4,7 @@
 {% if user.is_authenticated and user.is_associate %}
 	{% load is_already_applied %}
 	{% load is_already_hired %}
+	{% load is_already_rejected %}
 {% endif %}
 
 {% block content %}
@@ -66,10 +67,13 @@
 	        		{% elif user.is_authenticated and user.is_associate and user.profileassociate.is_verified %}
 	        			{% is_already_applied post request.user as is_applied %}
 	        			{% is_already_hired post request.user as is_hired %}
+	        			{% is_already_rejected post request.user as is_rejected %}
 	                    {% if is_applied and not is_hired %}
 	                        <input type="button" class="btn btn-success" value="Applied. Under review"/>
 	                    {% elif is_hired %}
 	                    	<input type="button" class="btn btn-success" value="Accepted."/>
+	                    {% elif is_hired %}
+	                    	<input type="button" class="btn btn-success" value="Sorry! Job post is turned down."/>
 	                    {% else %}
 		      				<form action="{% url 'apply_job' post.id %}" method="post">
 		                        {% csrf_token %}
