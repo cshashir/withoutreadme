@@ -9,7 +9,7 @@ register = template.Library()
 def is_already_hired(post, associate):
 	try:
 		application = Application.objects.get(post=post, associate=associate)
-		if application.is_rejected:
+		if application.rejected:
 			return True
 		else:
 			return False
