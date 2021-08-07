@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
+from phonenumber_field.formfields import PhoneNumberField
 from blog.models import ContactUs
 
 
@@ -11,10 +12,11 @@ class UserLoginForm(forms.Form):
 
 class FellowRegisterForm(UserCreationForm):
     email = forms.EmailField()
+    phone = PhoneNumberField(label="Phone number: +9188xxx xxx88")
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email','phone', 'password1', 'password2']
 
 
 class FellowUpdateForm(forms.ModelForm):
@@ -22,7 +24,7 @@ class FellowUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ProfileFellow
-        fields = ['first_name', 'last_name','company_name', 'estd', 'company_profile', 'city', 'address', 'phone']
+        fields = ['first_name', 'last_name','company_name', 'estd', 'company_profile', 'city', 'address']
 
 
 class FellowPicUpdateForm(forms.ModelForm):
@@ -33,10 +35,11 @@ class FellowPicUpdateForm(forms.ModelForm):
 
 class AssociateRegisterForm(UserCreationForm):
     email = forms.EmailField()
+    phone = PhoneNumberField(label="Phone number: +9188xxx xxx88")
 
     class Meta:
         model = User
-        fields = ['username','email', 'password1', 'password2']
+        fields = ['username', 'email','phone', 'password1', 'password2']
 
 
 class AssociateUpdateForm(forms.ModelForm):
@@ -44,7 +47,7 @@ class AssociateUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ProfileAssociate
-        fields = ['first_name', 'last_name','date_of_birth', 'gender', 'max_qualification','ssc_score', 'phone', 'aadhaar', 'associate_bio', 'work_ex']
+        fields = ['first_name', 'last_name','date_of_birth', 'gender', 'max_qualification','ssc_score', 'aadhaar', 'associate_bio', 'work_ex']
 
 
 class AssociatePicUpdateForm(forms.ModelForm):

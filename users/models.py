@@ -18,6 +18,7 @@ from django.conf import settings
 class User(AbstractUser):
     username = models.CharField(unique=True,max_length=30)
     email = models.EmailField(unique=True,max_length=75)
+    phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=True,null=False, blank=False, default = '8888888888')
     is_fellow = models.BooleanField(default=False)
     is_associate = models.BooleanField(default=False)
 
@@ -28,7 +29,7 @@ class ProfileFellow(models.Model):
     first_name = models.CharField(default='', max_length=15)
     last_name = models.CharField(default='', max_length=15)
     company_profile = models.TextField(default='')
-    phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=False,null=False, blank=False)
+    # phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=False,null=False, blank=False)
     image = models.ImageField(default='default_fellow.png', upload_to='profile_pics_fellow')
     estd = models.PositiveIntegerField("Establishment year", default='1998', blank=False, validators=[MaxValueValidator(9999)])
     is_fellow = models.BooleanField(default=True)
@@ -63,7 +64,7 @@ class ProfileAssociate(models.Model):
     first_name = models.CharField(default='', max_length=15)
     last_name = models.CharField(default='', max_length=15)
     gender = models.CharField(choices=Gender, max_length=6, default='Select')
-    phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=False,null=False, blank=False)
+    # phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=False,null=False, blank=False)
     aadhaar = models.PositiveIntegerField("UIDAI (Aadhaar) number: (will be used for verification purpose)", default='9', blank=False, validators=[MaxValueValidator(999999999999)])
     date_of_birth = models.DateField("Date of birth: (yyyy-mm-dd)", auto_now_add=False, auto_now=False, blank=False,default=timezone.now)
     image = models.ImageField(default='default_associate.png', upload_to='profile_pics_associate')

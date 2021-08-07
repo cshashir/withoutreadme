@@ -14,7 +14,8 @@
 	    <img class="rounded-circle account-img" src="{{ user.profilefellow.image.url }}">
 	    <div class="media-body">
 	      <h4 style="font-size: 1.5rem; font-weight: 600">{{ user.profilefellow.fellow }}</h4>
-	      <p class="text-secondary">{{ user.email }}</p>
+	      <p class="text-secondary mb-0">{{ user.email }}</p>
+          <p class="text-secondary mb-1">{{ user.phone }}</p>
           <a class= "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'recruitment_history' %}">Recruitment History</a>
 	    </div>
 	</div>
