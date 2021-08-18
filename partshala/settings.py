@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import json
+# import json
 
-with open('/etc/config.json') as config_file:
-    config = json.load(config_file)
+# with open('/etc/config.json') as config_file:
+#     config = json.load(config_file)
 
 import mimetypes
 mimetypes.add_type("image/svg_xml", ".svg", True)
@@ -29,10 +29,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config['SECRET_KEY']
+SECRET_KEY = '(hn+v9*p8c#mt-v^uai1!-0fo7o9156w6pubvnwbjyj_nq&h*='
+# SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','www.partshala.co', 'partshala.co', '15.207.115.33']
 # , 'ec2-15-207-115-33.ap-south-1.compute.amazonaws.com'
@@ -97,16 +98,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'partshaladb-1',
-#         'USER' : 'admin',
-#         'PASSWORD' : 'Maili1234',
-#         'HOST' : 'partshaladb-1.c44sn0xu08up.ap-south-1.rds.amazonaws.com',
-#         'PORT' : '3306',
-#     }
-# }
 
 # declaration for custom User model
 AUTH_USER_MODEL = "users.User"
@@ -159,18 +150,14 @@ LOGIN_REDIRECT_URL = 'blog-home'
 LOGIN_URL = 'login'
 
 EMAIL_BACKENED = 'django.core.mail.backends.smtp.EmailBackened'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'cshashir@gmail.com'
-# EMAIL_HOST_PASSWORD = 'ztgiqifpxizprejn'
-
-# EMAIL_HOST = 'relay-hosting.secureserver.net'
-# EMAIL_PORT = 25
 EMAIL_HOST = 'smtpout.secureserver.net'
 EMAIL_PORT = 80
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config.get('EMAIL_USER')
-EMAIL_HOST_PASSWORD = config.get('EMAIL_PASS')
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = 'support@partshala.co'
+EMAIL_HOST_PASSWORD = 'Aa2-3-4-5'
+
+# EMAIL_HOST_USER = config.get('EMAIL_USER')
+# EMAIL_HOST_PASSWORD = config.get('EMAIL_PASS')
+# DEFAULT_FROM_EMAIL = config.get('EMAIL_USER')
 
 TIME_INPUT_FORMATS = ('%H:%M',)
