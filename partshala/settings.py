@@ -35,7 +35,7 @@ SECRET_KEY = '(hn+v9*p8c#mt-v^uai1!-0fo7o9156w6pubvnwbjyj_nq&h*='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','www.partshala.co', 'partshala.co', '15.207.115.33']
+ALLOWED_HOSTS = ['localhost','www.part-shala.com', 'part-shala.com', '15.207.115.33']
 # , 'ec2-15-207-115-33.ap-south-1.compute.amazonaws.com'
 
 
@@ -99,6 +99,17 @@ DATABASES = {
 }
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': config.get('RDS_DB_NAME'),
+#         'USER': config.get('RDS_USERNAME'),
+#         'PASSWORD': config.get('RDS_PASSWORD').
+#         'HOST': config.get('RDS_HOSTNAME'),
+#         'PORT': config.get('RDS_PORT'),
+#     }
+# }
+
 # declaration for custom User model
 AUTH_USER_MODEL = "users.User"
 
@@ -153,7 +164,7 @@ EMAIL_BACKENED = 'django.core.mail.backends.smtp.EmailBackened'
 EMAIL_HOST = 'smtpout.secureserver.net'
 EMAIL_PORT = 80
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = 'support@partshala.co'
+EMAIL_HOST_USER = 'support@part-shala.com'
 EMAIL_HOST_PASSWORD = 'Aa2-3-4-5'
 
 # EMAIL_HOST_USER = config.get('EMAIL_USER')

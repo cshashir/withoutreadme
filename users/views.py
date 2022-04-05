@@ -234,7 +234,7 @@ def recall(request, application_id=None):
     associate = Application.objects.get(id=application_id)
     associate.recall = True
     associate.save()
-    messages.success(request, f'Noted. Associate would apply soon. Thank you!')
+    messages.success(request, f'Noted. Associate would be notified. Thank you!')
     return redirect('hire_associate_detail', application_id=application_id)
 
 class ApplicantDetailView(DetailView):
@@ -306,7 +306,6 @@ def associate_rating(request, application_id=None):
             application.associate_is_rated = True
             application.save()
 
-
             total_applications = Application.objects.count()
             associate = application.associate
             j = 0
@@ -322,8 +321,6 @@ def associate_rating(request, application_id=None):
             application.associate.profileassociate.associate_avg_rating = avg/j
             application.associate.profileassociate.save()
 
-
-            
             messages.success(request, f'Your review has been submitted. Thank you!')
             return redirect('hire_associate_detail', application_id=application_id)
         else:
@@ -377,7 +374,6 @@ def fellow_rating(request, application_id=None):
             application.fellow_is_rated = True
             application.save()
 
-
             total_applications = Application.objects.count()
             fellow = application.post.fellow
             j = 0
@@ -393,13 +389,11 @@ def fellow_rating(request, application_id=None):
             application.post.fellow.profilefellow.fellow_avg_rating = avg/j
             application.post.fellow.profilefellow.save()
 
-
             messages.success(request, f'Your review has been submitted. Thank you!')
             return redirect('application_detail', application_id=application_id)
         else:
-            form = AssociateRateForm(request.POST)
+            form = FellowRateForm(request.POST)
     return redirect('application_detail', application_id=application_id)
-
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -418,8 +412,6 @@ def fellows_complaint(request, application_id=None):
         else:
             form = FellowsComplaintForm(request.POST)
     return redirect('hire_associate_detail', application_id=application_id)
-
-
 
 
 @login_required(login_url=reverse_lazy('login'))

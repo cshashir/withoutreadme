@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 app_name = "partshala"
 
 urlpatterns = [
-    path('vicco/', admin.site.urls),
+    path('oloRider/', admin.site.urls),
     path('register-fellow/', user_views.register_fellow, name='register_fellow'),
     path('register-associate/', user_views.register_associate, name='register_associate'),
     path('profile-fellow/', include([

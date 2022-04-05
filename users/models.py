@@ -60,6 +60,24 @@ class ProfileAssociate(models.Model):
         ('Female','Female'),
         ('Other','Other'),
     )
+
+
+    Have_DL = (
+        ('Yes','Yes'),
+        ('No','No'),
+    )
+
+
+    Qualification = (
+        ('10th','10th'),
+        ('12th','12th'),
+        ('Diploma','Diploma'),
+        ('Under graduation','Under graduation'),
+        ('Graduation','Graduation'),
+        ('Other','Other'),
+    )
+
+
     associate = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(default='', max_length=15)
     last_name = models.CharField(default='', max_length=15)
@@ -67,14 +85,15 @@ class ProfileAssociate(models.Model):
     # phone = PhoneNumberField( "Phone number: +9188xxx xxx88", unique=False,null=False, blank=False)
     aadhaar = models.PositiveIntegerField("UIDAI (Aadhaar) number: (will be used for verification purpose)", default='9', blank=False, validators=[MaxValueValidator(999999999999)])
     date_of_birth = models.DateField("Date of birth: (yyyy-mm-dd)", auto_now_add=False, auto_now=False, blank=False,default=timezone.now)
-    image = models.ImageField(default='default_associate.png', upload_to='profile_pics_associate')
-    max_qualification = models.CharField(default='', max_length=25)
+    image = models.ImageField("Profile picture:", default='default_associate.png', upload_to='profile_pics_associate')
+    qualification = models.CharField("Qualification?", choices = Qualification, max_length=20, default='Select')
     ssc_score = models.FloatField("10th score (%):", default='100')
     hsc_score = models.FloatField("12th score (%):", default='100')
-    ssc_result = models.FileField(default='', upload_to='associate_documents', blank=False)
-    hsc_result = models.FileField(default='Not Applicable', upload_to='associate_documents', blank=True)
-    dl_copy = models.FileField(default='Not Applicable', upload_to='associate_documents', blank=True)
-    associate_bio = models.TextField("About you", default='', max_length=300)
+    ssc_result = models.FileField("10th Marksheet:", default='', upload_to='associate_documents', blank=False)
+    tenplus_result = models.FileField("12th Marksheet:", default='Not Applicable', upload_to='associate_documents', blank=True)
+    have_dl = models.CharField("Do you have driving license?", choices = Have_DL, max_length=3, default='Select')
+    dl_copy = models.FileField("Driving License:", default='Not Applicable', upload_to='associate_documents', blank=True)
+    associate_bio = models.TextField("About you:", default='', max_length=300)
     work_ex = models.TextField("Work Experience:",default='Fresher', max_length=300)
     last_updated = models.DateTimeField(default=datetime.now())
     associate_avg_rating = models.DecimalField(default=3, max_digits=2, decimal_places=1)
@@ -117,7 +136,7 @@ class Application(models.Model):
     )
     associate = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='applicants')
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, default = 0)
     created_at = models.DateTimeField(default=timezone.now)
     sent_to_employer = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)

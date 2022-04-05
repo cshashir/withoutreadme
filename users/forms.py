@@ -47,7 +47,7 @@ class AssociateUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ProfileAssociate
-        fields = ['first_name', 'last_name','date_of_birth', 'gender', 'max_qualification','ssc_score', 'aadhaar', 'associate_bio', 'work_ex']
+        fields = ['first_name', 'last_name','date_of_birth','gender' , 'qualification','ssc_score', 'have_dl', 'aadhaar', 'associate_bio', 'work_ex']
 
 
 class AssociatePicUpdateForm(forms.ModelForm):
@@ -66,7 +66,7 @@ class SSCResultForm(forms.ModelForm):
 class HSCResultForm(forms.ModelForm):
     class Meta:
         model = ProfileAssociate
-        fields = ['hsc_result']
+        fields = ['tenplus_result']
 
 
 class DLCopyForm(forms.ModelForm):
